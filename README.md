@@ -7,7 +7,7 @@
 ###### Mapping inféré après chargement des données
 ```json
 {
-  "hol_devoxxfr_gstore_v1" : {
+  "tp_elastic_gstore_v1" : {
     "aliases" : { },
     "mappings" : {
       "doc" : {
@@ -120,7 +120,7 @@
         "version" : {
           "created" : "6060099"
         },
-        "provided_name" : "hol_devoxxfr_gstore_v1"
+        "provided_name" : "tp_elastic_gstore_v1"
       }
     }
   }
