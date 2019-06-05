@@ -5,7 +5,7 @@
 ##### Création index de travail
 
 ```shell     
-POST /hol_devoxxfr_mp1/_doc/_bulk
+POST /tp_elastic_mp1/_doc/_bulk
 { "index": { "_id": 1 }}
 { "title": "Je ne suis pas content. Service client nul" }
 { "index": { "_id": 2 }}
@@ -23,7 +23,7 @@ Si vous avez fait l'exercice 2.1, vous l'avez déjà utilisé. Il s'agit de la r
 
 
 ```shell     
-GET /hol_devoxxfr_mp1/_analyze
+GET /tp_elastic_mp1/_analyze
 {
   "field": "app_name",
   "text" : "Je suis tres content. pas de probleme"
@@ -92,7 +92,7 @@ Le résultat donne la position de chaque token. Cette information est donc connu
 
 ###### Faites la requête
 ```shell
-GET /hol_devoxxfr_mp1/_search
+GET /tp_elastic_mp1/_search
 {
   "query": 
   {
@@ -142,7 +142,7 @@ Cette requête ne retourne qu'un seul document.
 Requête multimatch avec la chaîne "pas content"
 
 ```shell
-GET /hol_devoxxfr_mp1/_search
+GET /tp_elastic_mp1/_search
 {
   "query": 
   {
@@ -158,7 +158,7 @@ GET /hol_devoxxfr_mp1/_search
 ##### Match phrase avec slop 
 
 ```shell
-GET /hol_devoxxfr_mp1/_search
+GET /tp_elastic_mp1/_search
 {
   "query": 
   {
