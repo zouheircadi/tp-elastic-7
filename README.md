@@ -1,4 +1,3 @@
-# Hand On Lab Devoxx France 2019-04
 ## Gestion des index
 ### Creation d’un index sur la base d’un template
 
