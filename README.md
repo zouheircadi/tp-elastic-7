@@ -1,7 +1,7 @@
 # Hand On Lab Devoxx France 2019-04
-# 2. Recherches
-### 2.4 Partial matching
-#### 2.4.1 Chargement du jeu d’essai
+# Recherches
+### Partial matching
+#### Chargement du jeu d’essai
 
 Le jeu d'essai consiste en une liste de pays tronquée à la lettre F. Le chargement peut se faire de deux manières différentes 
 * DevTools Kibana.
