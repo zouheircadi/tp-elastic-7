@@ -2,7 +2,7 @@
 ### Création Index avec mapping personnalisé
 
 Créer un index avec les caractéristiques suivantes
-* Nom : hol_devoxxfr_14
+* Nom : tp_elastic_14
 * Dont le mapping est
     * Type : _doc
         * Champs
@@ -12,7 +12,7 @@ Créer un index avec les caractéristiques suivantes
             * rating : double
 
 ```json
-PUT /hol_devoxxfr_14
+PUT /tp_elastic_14
 {
   "mappings": 
   {
@@ -32,7 +32,7 @@ PUT /hol_devoxxfr_14
 
 Indexer les données avec la requête REST ci-dessous
 ```shell
-POST /hol_devoxxfr_14/_doc/_bulk
+POST /tp_elastic_14/_doc/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor", "category" : "ART-AND-DESIGN", "last_updated" : "2018-01-06","rating" : 4.1}
 { "index": { "_id": 2 }}
@@ -54,13 +54,13 @@ Vérifier que votre index
 
 La vérification se fait par une simple requête GET sur l'index nouvellement créé. On contrôle ensuite dans la partie settings que l'index possède bien les caractéristiques définies dans le template et dans le mapping.
 ```shell
-GET /hol_devoxxfr_14
+GET /tp_elastic_14
 ```
 
 Résultat de sortie du GET
 ```json
 {
-  "hol_devoxxfr_14" : {
+  "tp_elastic_14" : {
     "aliases" : { },
     "mappings" : {
       "_doc" : {
@@ -89,7 +89,7 @@ Résultat de sortie du GET
         "version" : {
           "created" : "6060099"
         },
-        "provided_name" : "hol_devoxxfr_14"
+        "provided_name" : "tp_elastic_14"
       }
     }
   }
