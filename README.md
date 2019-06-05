@@ -1,6 +1,6 @@
 # Hand On Lab Devoxx France 2019-04
 ## Gestion des index
-### 1.5 Gestion Alias
+### Gestion Alias
 
 
 ###### Créer un premier index en mode autocréation avec la requête ci-dessous
