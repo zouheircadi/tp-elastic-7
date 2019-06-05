@@ -3,7 +3,7 @@
 
 Créer un index par injection de données
 ```shell
-POST hol_devoxxfr_11/_doc/_bulk
+POST tp_elastic_11/_doc/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor", "category" : "ART-AND-DESIGN", "last_updated" : "2018-01-06","rating" : 4.1}
 { "index": { "_id": 2 }}
@@ -21,7 +21,7 @@ POST hol_devoxxfr_11/_doc/_bulk
 
 Afficher les caractéristiques de l’index nouvellement créé
 ```shell
-GET /hol_devoxxfr_11
+GET /tp_elastic_11
 ```
 
 Si on fait un parallèle avec les bases de données relationnelles, tout se passe comme si un insert entrainait la création du schéma avec une inférence des types.
@@ -37,7 +37,7 @@ Le [mode autocréation](https://www.elastic.co/guide/en/elasticsearch/reference/
 Résultat de sortie
 ```json
 {
-  "hol_devoxxfr_11" : {
+  "tp_elastic_11" : {
     "aliases" : { },
     "mappings" : {
       "_doc" : {
@@ -78,7 +78,7 @@ Résultat de sortie
         "version" : {
           "created" : "6060099"
         },
-        "provided_name" : "hol_devoxxfr_11"
+        "provided_name" : "tp_elastic_11"
       }
     }
   }
