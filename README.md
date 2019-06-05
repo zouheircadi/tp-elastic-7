@@ -4,7 +4,7 @@
 ##### Prefix query  
 
 ```shell
-GET /hol_devoxxfr_pm1/_search
+GET /tp_elastic_pm1/_search
 {
   "query" :
   {
@@ -20,7 +20,7 @@ GET /hol_devoxxfr_pm1/_search
 ###### validate pour voir la chaine utilisée dans la requête
 
 ```shell
-GET /hol_devoxxfr_pm1/_validate/query?explain
+GET /tp_elastic_pm1/_validate/query?explain
 {
   "query" :
   {
@@ -44,7 +44,7 @@ Résultat
   "valid" : true,
   "explanations" : [
     {
-      "index" : "hol_devoxxfr_pm1",
+      "index" : "tp_elastic_pm1",
       "valid" : true,
       "explanation" : "country:Ba*"
     }
@@ -58,7 +58,7 @@ Le prefixe recherché est la chaine Ba. La casse de la chaine n'est pas modifié
 ##### RegExp query
 
 ```shell
-GET /hol_devoxxfr_pm1/_search
+GET /tp_elastic_pm1/_search
 {
   "query" :
   {
@@ -75,7 +75,7 @@ GET /hol_devoxxfr_pm1/_search
 ###### Validate pour voir la chaine utilisée dans la requête
 
 ```shell
-GET /hol_devoxxfr_pm1/_validate/query?explain
+GET /tp_elastic_pm1/_validate/query?explain
 {
   "query" :
   {
@@ -99,7 +99,7 @@ Résultat
   "valid" : true,
   "explanations" : [
     {
-      "index" : "hol_devoxxfr_pm1",
+      "index" : "tp_elastic_pm1",
       "valid" : true,
       "explanation" : "country:/.*Repu.*/"
     }
@@ -119,7 +119,7 @@ Le typage du champ country est keyword. Il faut donc respecter la casse pour fai
 
 ###### En vous aidant de la documentation en ligne pour la syntaxe, trouver les documents dont le champ country commence par cong.
 ```shell
-GET /hol_devoxxfr_pm1/_search
+GET /tp_elastic_pm1/_search
 {
   "query": 
   {
@@ -132,7 +132,7 @@ GET /hol_devoxxfr_pm1/_search
 
 ###### Si vous avez chargé le jeu d’essais avec les scripts qui vous ont été procurés, la recherche devrait être infructueuse. Pourquoi ?
 ```shell
-GET /hol_devoxxfr_pm1/_validate/query?explain
+GET /tp_elastic_pm1/_validate/query?explain
 {
   "query": 
   {
@@ -145,7 +145,7 @@ GET /hol_devoxxfr_pm1/_validate/query?explain
 
 La chaine cong devrait être jokérisée. Ca n'est pas le cas. Pensez aussi au fait que les champs sont de type keyword
 
-###### Créer un autre index hol_devoxxfr_pm2 avec le bon mapping et recharger les données. 
+###### Créer un autre index tp_elastic_pm2 avec le bon mapping et recharger les données. 
 
 Le mapping correct vous est fourni dans le fichier shell ./data/post-data-2-curl.sh. Le mapping du champ country est maintenant de type text
 
@@ -154,7 +154,7 @@ Si vous n’avez pas la possibilité d’exécuter un script shell sur votre pos
 
 ###### validate de la query sur le nouvel index
 ```shell
-GET /hol_devoxxfr_pm2/_validate/query?explain
+GET /tp_elastic_pm2/_validate/query?explain
 {
   "query": 
   {
@@ -167,9 +167,9 @@ GET /hol_devoxxfr_pm2/_validate/query?explain
 * explain sur le champ donne maintenant un résultat jokérisé
 
 
-###### Refaites la requête sur l’index hol_devoxxfr_pm2
+###### Refaites la requête sur l’index tp_elastic_pm2
 ```shell
-GET /hol_devoxxfr_pm2/_search
+GET /tp_elastic_pm2/_search
 {
   "query": 
   {
