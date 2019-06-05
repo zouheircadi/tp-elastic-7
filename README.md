@@ -4,7 +4,7 @@
 
 ###### Données à charger avec les devTools Kibana
 ```shell
-POST hol_devoxxfr_filter/_doc/_bulk
+POST tp_elastic_filter/_doc/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor & Candy Camera & Grid & ScrapBook", "type" : "Free", "genres" : "Art & Design", "category" : "ART_AND_DESIGN","price" : 0.0, "last_updated" : "2018-01-06T23:00:00.000Z", "content_rating" : "Everyone","rating" : 4.1}
 { "index": { "_id": 2 }}
@@ -59,7 +59,7 @@ Plusieurs réponses possibles
 
 Le match_all peut être remplacé par une ou des requêtes full text (match, multi_match, ...). Si tel était le cas, le contexte aurait été de type full text avec un calcul de score.
 ```shell
-POST hol_devoxxfr_filter/_search
+POST tp_elastic_filter/_search
 {
   "query": 
   {
@@ -83,7 +83,7 @@ POST hol_devoxxfr_filter/_search
 
 * Avec une query de type booléen et un filtre
 ```shell
-POST hol_devoxxfr_filter/_search
+POST tp_elastic_filter/_search
 {
   "query": 
   {
@@ -102,7 +102,7 @@ POST hol_devoxxfr_filter/_search
 
 * Avec une constant score query
 ```shell
- GET /hol_devoxxfr_filter/_doc/_search
+ GET /tp_elastic_filter/_doc/_search
  {
      "query" : {
          "constant_score" : {
@@ -119,7 +119,7 @@ POST hol_devoxxfr_filter/_search
 
 ###### Quels sont tous les documents pour lesquels le champ date  last_updated est compris entre 2017-01-01 et 2017-12-31 (les documents de 2017 en somme) ?
 ```shell
-POST hol_devoxxfr_filter/_search
+POST tp_elastic_filter/_search
 {
   "query": 
   {
@@ -145,7 +145,7 @@ POST hol_devoxxfr_filter/_search
 
 ###### Quels sont les documents dont le rating est strictement supérieur à 4.6 ?
 ```shell
-POST hol_devoxxfr_filter/_search
+POST tp_elastic_filter/_search
 {
   "query": 
   {
