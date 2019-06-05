@@ -1,6 +1,6 @@
 # Hand On Lab Devoxx France 2019-04
-## 2.2 Recherches full-text
-### 2.2.2 Recherches multichamps - un texte spécifique à chaque champ
+## Recherches full-text
+### Recherches multichamps - un texte spécifique à chaque champ
 
 
 ###### inject data
