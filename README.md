@@ -1,4 +1,3 @@
-# Hand On Lab Devoxx France 2019-04
 # Recherches
 ### Partial matching
 #### Partial matching sans modification de l’indexation
