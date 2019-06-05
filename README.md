@@ -1,4 +1,3 @@
-# Hand On Lab Devoxx France 2019-04
 # Recherches
 ### Partial matching
 #### Chargement du jeu d’essai
