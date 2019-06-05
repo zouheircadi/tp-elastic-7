@@ -1,4 +1,3 @@
-# Hand On Lab Devoxx France 2019-04
 ## Recherches full-text
 ### Recherches sur un champ unique
 
