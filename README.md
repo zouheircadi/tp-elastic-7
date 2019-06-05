@@ -7,7 +7,7 @@
 Les trois requêtes ci-dessous de type filtre ne retournent aucun résultat
 * constant score query
 ```shell
-GET /hol_devoxxfr_11/_doc/_search
+GET /tp_elastic_11/_doc/_search
 {
     "query" : {
         "constant_score" : {
@@ -24,7 +24,7 @@ GET /hol_devoxxfr_11/_doc/_search
 
 * boolean query
 ```shell
-GET /hol_devoxxfr_11/_search
+GET /tp_elastic_11/_search
 {
   "query": 
   {
@@ -43,7 +43,7 @@ GET /hol_devoxxfr_11/_search
 
 * boolean mixte query
 ```shell
-GET /hol_devoxxfr_11/_search
+GET /tp_elastic_11/_search
 {
   "query": 
   {
@@ -70,12 +70,12 @@ GET /hol_devoxxfr_11/_search
 * on vérifie dans un premier temps que l'index contient bien des données
 
 ```shell
-GET /hol_devoxxfr_11/_search
+GET /tp_elastic_11/_search
 ```
 
 * On utilise ensuite le endPoint _analyze pour voir comment est indexé le champ  
 ```json
-GET /hol_devoxxfr_11/_analyze
+GET /tp_elastic_11/_analyze
 {
   "field" : "category",  
   "text" : "ART-AND-DESIGN"
@@ -86,7 +86,7 @@ L'API analyse nous indique que le champ n'est pas indexé tel quel. Il est token
 
 Si on effectue le même test sur le champ category.keyword, on constate que le contenu du champ est indexé tel quel
 ```json
-GET /hol_devoxxfr_11/_analyze
+GET /tp_elastic_11/_analyze
 {
   "field" : "category.keyword",  
   "text" : "ART-AND-DESIGN"
@@ -96,18 +96,18 @@ GET /hol_devoxxfr_11/_analyze
 
 ###### Quelle(s) solution(s) peut-on envisager pour remédier à cette situation ?
 
-* index hol_devoxxfr_11
+* index tp_elastic_11
     * Lorsqu'on utilise le "mapping automatique", tout champ de type texte est indexé de deux manières 
         * Indexation de type text => Le champ est analysé
         * Indexation de type keyword => Le champ n'est pas analysé. Il est indexé sans aucune modification.
-    * Pour l'index hol_devoxxfr_11, on peut donc interroger le champ category.keyword
+    * Pour l'index tp_elastic_11, on peut donc interroger le champ category.keyword
 
 
 
 
 
 ```shell
-GET /hol_devoxxfr_11/_doc/_search
+GET /tp_elastic_11/_doc/_search
 {
     "query" : {
         "constant_score" : {
@@ -122,9 +122,9 @@ GET /hol_devoxxfr_11/_doc/_search
 }
 ```
 
-* Pour l'index hol_devoxxfr_14, on peut interroger le champ category pour lequel on a fixé le mapping
+* Pour l'index tp_elastic_14, on peut interroger le champ category pour lequel on a fixé le mapping
 ```shell
-GET /hol_devoxxfr_14/_doc/_search
+GET /tp_elastic_14/_doc/_search
 {
     "query" : {
         "constant_score" : {
