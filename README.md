@@ -1,9 +1,9 @@
 # Hand On Lab Devoxx France 2019-04
-## 2.2 Recherches full-text
-### 2.2.3 Recherches multichamps - un texte commun à tous les champs
+## Recherches full-text
+### Recherches multichamps - un texte commun à tous les champs
 
 
-##### 2.2.3.1 Recherches de type booléen
+#### Recherches de type booléen
 * Trouver les documents qui contiennent
     * "draw art" dans le champ app_name
     * "draw art" dans le champ genres
@@ -26,7 +26,7 @@ GET  hol_devoxxfr_mf1/_search
 ```
 
 
-##### 2.2.3.2 Effets de bord du mode précédent
+#### Effets de bord du mode précédent
 On recherche les tokens "draw art" dans les documents ci-dessous
 
 ```shell
@@ -60,7 +60,7 @@ Les tokens draw et art sont présents
 On peut ne pas se satisfaire de ce mode de calcul. Comment faire pour que les champs qui contiennent le plus de mots recherchés remontent mieux ? La réponse est dans l’exercice suivant.
 
 
-###### 2.2.3.3 Recherches de type Dismax
+##### Recherches de type Dismax
 
 ```json
 GET /hol_devoxxfr_mf2/_search
@@ -79,7 +79,7 @@ GET /hol_devoxxfr_mf2/_search
 ```
 
 
-###### 2.2.3.4 Recherches de type Dismax  - effet de bord
+##### Recherches de type Dismax  - effet de bord
 
 ```json
 POST /hol_devoxxfr_mf3/_doc/_bulk
@@ -113,7 +113,7 @@ La solution pour tenir compte de tous les champs qui matchent est expliquée dan
 
 
 
-###### 2.2.3.5 Recherches de type Dismax  avec tiebreaker
+##### Recherches de type Dismax  avec tiebreaker
 
 ```json
 GET /hol_devoxxfr_mf3/_search
@@ -133,7 +133,7 @@ GET /hol_devoxxfr_mf3/_search
 ```
 
 
-###### 2.2.3.6 Comprendre le score du mode Dismax
+##### Comprendre le score du mode Dismax
 
 Pour décomposer le score, il faut faire un explain comme indiqué ci-dessous
 
@@ -185,7 +185,7 @@ Modulation de l'effet tie_breaker
 * tie_breaker = 1 : Suppression de l'effet Dismax 
 * tie_breaker usuel 0.3 à 0.4
 
-#### 2.2.3.7 Queries de type Multimatch
+##### Queries de type Multimatch
 
 ```shell      
 GET /hol_devoxxfr_mf3/_search
@@ -205,7 +205,7 @@ GET /hol_devoxxfr_mf3/_search
 
 Selon, le type choisi (most_fields ou cross_fields), ce type de requête propose [d’autres fonctionnalités](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html).
 
-#### 2.2.3.8 Multimatch avec pondération de champs
+#### Multimatch avec pondération de champs
 
 ```shell
 GET /hol_devoxxfr_mf3/_search
@@ -230,4 +230,3 @@ La pondération est appelée boost est peut être
 Il est possible d'appliquer des boosts différents à chaque champ. Dans l'exemple donné, on applique
 * un boost de 4 au champ app_name ce qui augmentera son poids dans le score global du document
 * un boost de 0.3 au champ genres ce qui diminuera son poids dans le score global du document
-
