@@ -1,6 +1,6 @@
 # Hand On Lab Devoxx France 2019-04
 ## Gestion des index
-### 1.3 Creation d’un index sur la base d’un template
+### Creation d’un index sur la base d’un template
 
 Créer un index par injection de données avec le POST ci-dessous. L’index créé devrait logiquement avoir les caractéristiques définies dans le template
       
