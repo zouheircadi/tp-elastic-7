@@ -96,12 +96,12 @@ GET hol_devoxxfr_pm3/_search
 ```shell
 GET /hol_devoxxfr_pm3/_analyze
 {
-  "text": ["Republic"],
+  "text": ["REPUBLic"],
   "field": "country.autocomplete"
 }
 ```
 
-La sortie devrait être
+La sortie devrait être comme indiqué ci-dessous. Le token REPUBLic passe l'analyseur de type edge_ngram.
 ```shell
 {
   "tokens" : [
