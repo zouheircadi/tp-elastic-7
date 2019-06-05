@@ -1,14 +1,14 @@
 # Recherches
 ## Partial matching
 ### Partial matching avec modification de l’indexation : edge-ngrams
-###### En vous aidant de la documentation en ligne, créer un index de type index-time-search-as-you-type que vous appellerez hol_devoxxfr_pm3
+###### En vous aidant de la documentation en ligne, créer un index de type index-time-search-as-you-type que vous appellerez tp_elastic_pm3
 
 ```shell
-DELETE hol_devoxxfr_pm3
+DELETE tp_elastic_pm3
 ```
 
 ```shell
-PUT /hol_devoxxfr_pm3
+PUT /tp_elastic_pm3
 {
   "settings": 
   {
@@ -80,7 +80,7 @@ PUT /hol_devoxxfr_pm3
 ###### Tester le nouvel index en cherchant le token “rep”
 
 ```shell
-GET hol_devoxxfr_pm3/_search
+GET tp_elastic_pm3/_search
 {
   "query": 
   {
@@ -94,7 +94,7 @@ GET hol_devoxxfr_pm3/_search
 
 ###### Faites une analyze de la chaine “REPUBLic” sur le champ country.autocomplete
 ```shell
-GET /hol_devoxxfr_pm3/_analyze
+GET /tp_elastic_pm3/_analyze
 {
   "text": ["REPUBLic"],
   "field": "country.autocomplete"
