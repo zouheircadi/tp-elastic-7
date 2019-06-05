@@ -1,6 +1,6 @@
 # Hand On Lab Devoxx France 2019-04
 ## Gestion des index
-### 1.4 Création Index avec mapping personnalisé
+### Création Index avec mapping personnalisé
 
 Créer un index avec les caractéristiques suivantes
 * Nom : hol_devoxxfr_14
