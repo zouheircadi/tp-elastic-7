@@ -1,9 +1,8 @@
-# Hand On Lab Devoxx France 2019-04
 # 2 Recherches
-## 2.3 Proximité
-### 2.3.1 Phrase match
+## Proximité
+### Phrase match
 
-##### 2.3.1.1 Création index de travail
+##### Création index de travail
 
 ```shell     
 POST /hol_devoxxfr_mp1/_doc/_bulk
@@ -16,7 +15,7 @@ POST /hol_devoxxfr_mp1/_doc/_bulk
 ```
 
 
-##### 2.3.1.2 Analyse des données indexées
+##### Analyse des données indexées
 ###### Mettez en évidence cet ordre avec le champ title du document d’identifiant 3.
 
 
@@ -89,7 +88,7 @@ Le résultat donne la position de chaque token. Cette information est donc connu
 }
 ```
 
-##### 2.3.1.3 match ou match_phrase
+##### match ou match_phrase
 
 ###### Faites la requête
 ```shell
@@ -156,7 +155,7 @@ GET /hol_devoxxfr_mp1/_search
 ```
 
 
-##### 2.3.1.4 Match phrase avec slop 
+##### Match phrase avec slop 
 
 ```shell
 GET /hol_devoxxfr_mp1/_search
