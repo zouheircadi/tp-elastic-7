@@ -1,8 +1,8 @@
 # Hand On Lab Devoxx France 2019-04
-# 2. Recherches
-### 2.4 Partial matching
-#### 2.4.2 Partial matching sans modification de l’indexation
-##### 2.4.2.1 Prefix query  
+# Recherches
+### Partial matching
+#### Partial matching sans modification de l’indexation
+##### Prefix query  
 
 ```shell
 GET /hol_devoxxfr_pm1/_search
@@ -56,7 +56,7 @@ Le prefixe recherché est la chaine Ba. La casse de la chaine n'est pas modifié
 
 
 
-##### 2.4.2.2 RegExp query
+##### RegExp query
 
 ```shell
 GET /hol_devoxxfr_pm1/_search
@@ -116,7 +116,7 @@ Le typage du champ country est keyword. Il faut donc respecter la casse pour fai
 * Requêtes inefficace à proscrire sur des corpus volumineux en tenant compte de la cardinalité du champ
 
 
-##### 2.4.2.3 match_phrase_prefix 
+##### match_phrase_prefix 
 
 ###### En vous aidant de la documentation en ligne pour la syntaxe, trouver les documents dont le champ country commence par cong.
 ```shell
