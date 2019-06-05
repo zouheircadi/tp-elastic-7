@@ -1,4 +1,3 @@
-# Hand On Lab Devoxx France 2019-04
 ## Les filtres (recherches structurées)
 ### Recherches basiques de type filtre - 2 (chargement des données)
 
