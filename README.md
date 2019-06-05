@@ -1,4 +1,4 @@
-# 2 Recherches
+# Recherches
 ## Proximité
 ### Phrase match
 
