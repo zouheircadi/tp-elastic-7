@@ -1,6 +1,6 @@
 # Hand On Lab Devoxx France 2019-04
 ## Gestion des index
-### 1.6 Suppression index
+### Suppression index
 
 
 ###### Supprimer l’index hol_devoxxfr_152
