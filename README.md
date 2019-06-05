@@ -4,7 +4,7 @@
 
 ###### Faites une requête de type match sur le champ app_name pour la chaîne photos.
 ```shell
-GET hol_devoxxfr_filter/_search
+GET tp_elastic_filter/_search
 {
   "query": 
   {
@@ -18,7 +18,7 @@ GET hol_devoxxfr_filter/_search
 ###### Cette requête ne permet de trouver aucun document. Pourquoi (réponse argumentée avec l’outillage mis à disposition par Elasticsearch) ?
 
 ```shell
-GET hol_devoxxfr_filter/_analyze
+GET tp_elastic_filter/_analyze
 {
   "text": ["photos"],
   "field": "app_name"
@@ -30,7 +30,7 @@ Le terme photos est analysé en photos. Il est donc normal de ne pas le trouver
 ###### Quel test pourrait-on faire pour trouver un ou des analyzers adéquats sans indexation de données (réponse argumentée avec l’outillage mis à disposition par Elasticsearch)?
 
 ```shell
-GET hol_devoxxfr_filter/_analyze
+GET tp_elastic_filter/_analyze
 {
   "text": ["photos"],
   "analyzer": "english"
@@ -58,18 +58,18 @@ Nous allons créer l'index [en deux étapes](https://www.elastic.co/guide/en/ela
 
 Suppression de l'index
 ```shell
-DELETE hol_devoxxfr_lang1
+DELETE tp_elastic_lang1
 ```
 
 
 Création de l'index
 ```shell
-PUT hol_devoxxfr_lang1
+PUT tp_elastic_lang1
 ```
 
 Création du mapping
 ```shell
-PUT hol_devoxxfr_lang1/_mapping/_doc
+PUT tp_elastic_lang1/_mapping/_doc
 {
   "properties" : 
   {
@@ -135,7 +135,7 @@ PUT hol_devoxxfr_lang1/_mapping/_doc
 
 #### Ajout des données
 ```shell
-POST /hol_devoxxfr_lang1/_doc/_bulk
+POST /tp_elastic_lang1/_doc/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor & Candy Camera & Grid & ScrapBook", "type" : "Free", "genres" : "Art & Design", "category" : "ART_AND_DESIGN","price" : 0.0, "last_updated" : "2018-01-06T23:00:00.000Z", "content_rating" : "Everyone","rating" : 4.1}
 { "index": { "_id": 2 }}
@@ -174,7 +174,7 @@ POST /hol_devoxxfr_lang1/_doc/_bulk
 
 * Approche naïve
 ```shell
-GET hol_devoxxfr_lang1/_search
+GET tp_elastic_lang1/_search
 {
   "query": 
   {
@@ -189,7 +189,7 @@ GET hol_devoxxfr_lang1/_search
 
 * Je connais mon mapping et je sais ajouter des champs imbriqués dans la requête multifields pour tenir compte de la langue du texte pour augmenter le recall
 ```shell
-GET hol_devoxxfr_lang1/_search
+GET tp_elastic_lang1/_search
 {
   "query": 
   {
@@ -213,7 +213,7 @@ On constate ainsi que l'augmentation de la pondération du champ app_name ne cha
 Pour conclure, il faut bien garder à l'esprit que la query de type pierre philosphale n'existe pas. Une requête et le tuning correspondant ne sont que l'expression d'un cas d'utilisation. 
 
 ```shell
-GET hol_devoxxfr_lang1/_search
+GET tp_elastic_lang1/_search
 {
   "query": 
   {
