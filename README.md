@@ -1,6 +1,6 @@
 # Hand On Lab Devoxx France 2019-04
-## 2.1 Les filtres (recherches structurées)
-###  2.1.2 Recherches basiques de type filtre - 2 (chargement des données)
+## Les filtres (recherches structurées)
+### Recherches basiques de type filtre - 2 (chargement des données)
 
 
 ###### Données à charger avec les devTools Kibana
