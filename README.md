@@ -5,7 +5,7 @@
 ```shell
 PUT /_template/template_hol_dvxfr
 {
-  "index_patterns": ["hol_devoxxfr*"],
+  "index_patterns": ["tp_elastic*"],
   "settings": 
   {
     "number_of_shards" : 1,
@@ -15,11 +15,11 @@ PUT /_template/template_hol_dvxfr
 ```
 
 Le template comprendra 2 parties
-* Index patterns : tableau avec l’expression régulière suivante : hol_devoxxfr* 
+* Index patterns : tableau avec l’expression régulière suivante : tp_elastic* 
 * Settings
     * Nombre de shards : 1
     * Nombre de replicas : 0
 
-Tous les index dont le nom commencera par hol_devoxxfr auront 1 shard et zéro réplicas
+Tous les index dont le nom commencera par tp_elastic auront 1 shard et zéro réplicas
 
 [Allez plus loin](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html)
