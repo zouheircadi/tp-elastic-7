@@ -4,7 +4,7 @@
 Créer un index par injection de données avec le POST ci-dessous. L’index créé devrait logiquement avoir les caractéristiques définies dans le template
       
 ```shell
-POST /hol_devoxxfr_13/_doc/_bulk
+POST /tp_elastic_13/_doc/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor", "category" : "ART-AND-DESIGN", "last_updated" : "2018-01-06","rating" : 4.1}
 { "index": { "_id": 2 }}
@@ -24,7 +24,7 @@ POST /hol_devoxxfr_13/_doc/_bulk
 Pour créer un index dont la structure obéit à un template, il suffit de respecter l’expression régulière présente dans l’attribut index_pattern utilisée lors de sa création.
 La vérification se fait par une simple requête GET sur l'index nouvellement créé. On contrôle ensuite dans la partie settings de l'index possède bien les caractéristiques définies dans le template.
 ```shell
-GET /hol_devoxxfr_13
+GET /tp_elastic_13
 ```
  
 
@@ -32,7 +32,7 @@ GET /hol_devoxxfr_13
 Résultat de sortie du GET
 ```json
 {
-  "hol_devoxxfr_13" : {
+  "tp_elastic_13" : {
     "aliases" : { },
     "mappings" : {
       "_doc" : {
@@ -73,7 +73,7 @@ Résultat de sortie du GET
         "version" : {
           "created" : "6060099"
         },
-        "provided_name" : "hol_devoxxfr_13"
+        "provided_name" : "tp_elastic_13"
       }
     }
   }
