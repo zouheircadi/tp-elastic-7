@@ -8,7 +8,7 @@
     * "draw art" dans le champ genres
 
 ```shell      
-GET  hol_devoxxfr_mf1/_search
+GET  tp_elastic_mf1/_search
 {
   "query": 
   {
@@ -29,7 +29,7 @@ GET  hol_devoxxfr_mf1/_search
 On recherche les tokens "draw art" dans les documents ci-dessous
 
 ```shell
-POST /hol_devoxxfr_mf2/_doc/_bulk
+POST /tp_elastic_mf2/_doc/_bulk
 { "index": { "_id": 1 }}
 {"genres" : "Entertainment", "app_name" : "Pixel Draw Art filter for selfies"}
 { "index": { "_id": 2 }}
@@ -37,7 +37,7 @@ POST /hol_devoxxfr_mf2/_doc/_bulk
 ```
 
 ```json
-GET /hol_devoxxfr_mf2/_search
+GET /tp_elastic_mf2/_search
 {
  "query": {
    "bool": {
@@ -62,7 +62,7 @@ On peut ne pas se satisfaire de ce mode de calcul. Comment faire pour que les ch
 ##### Recherches de type Dismax
 
 ```json
-GET /hol_devoxxfr_mf2/_search
+GET /tp_elastic_mf2/_search
 {
  "query":
  {
@@ -81,7 +81,7 @@ GET /hol_devoxxfr_mf2/_search
 ##### Recherches de type Dismax  - effet de bord
 
 ```json
-POST /hol_devoxxfr_mf3/_doc/_bulk
+POST /tp_elastic_mf3/_doc/_bulk
 { "index": { "_id": 1 }}
 {"genres" : "Art", "app_name" : "Pixel Draw Number"}
 { "index": { "_id": 2 }}
@@ -91,7 +91,7 @@ POST /hol_devoxxfr_mf3/_doc/_bulk
 
 
 ```json
-GET /hol_devoxxfr_mf3/_search
+GET /tp_elastic_mf3/_search
 {
  "query":
  {
@@ -115,7 +115,7 @@ La solution pour tenir compte de tous les champs qui matchent est expliquée dan
 ##### Recherches de type Dismax  avec tiebreaker
 
 ```json
-GET /hol_devoxxfr_mf3/_search
+GET /tp_elastic_mf3/_search
 {
  "query":
  {
@@ -139,7 +139,7 @@ Pour décomposer le score, il faut faire un explain comme indiqué ci-dessous
  * Pour tous les documents
 
 ```shell      
-GET /hol_devoxxfr_mf3/_search?explain=true
+GET /tp_elastic_mf3/_search?explain=true
 {
   "query": 
   {
@@ -157,7 +157,7 @@ GET /hol_devoxxfr_mf3/_search?explain=true
 
 * Pour le document d'identifiant 2
 ```json
-GET /hol_devoxxfr_mf3/_doc/2/_explain
+GET /tp_elastic_mf3/_doc/2/_explain
 {
   "query": 
   {
@@ -187,7 +187,7 @@ Modulation de l'effet tie_breaker
 ##### Queries de type Multimatch
 
 ```shell      
-GET /hol_devoxxfr_mf3/_search
+GET /tp_elastic_mf3/_search
 {
   "query": 
   {
@@ -207,7 +207,7 @@ Selon, le type choisi (most_fields ou cross_fields), ce type de requête propose
 #### Multimatch avec pondération de champs
 
 ```shell
-GET /hol_devoxxfr_mf3/_search
+GET /tp_elastic_mf3/_search
 {
   "query": 
   {
