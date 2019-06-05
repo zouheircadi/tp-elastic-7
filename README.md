@@ -3,7 +3,7 @@
 
 
 ```shell
-PUT /_template/template_hol_dvxfr
+PUT /_template/template_tp_elastic
 {
   "index_patterns": ["tp_elastic*"],
   "settings": 
