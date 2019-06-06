@@ -1,6 +1,5 @@
-# Hand On Lab Devoxx France 2019-04
-# 3 Cas d’utilisation Google Play Store
-## 3.1 Chargement du fichier de travail
+# Cas d’utilisation Google Play Store
+## Chargement du fichier de travail
 
 
 
