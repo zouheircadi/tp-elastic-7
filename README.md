@@ -1,21 +1,9 @@
-######3 Cas d’utilisation Google Play Store
-#######3.2 Recherches
+## 3 Cas d’utilisation Google Play Store
+### 3.2 Recherches
 
 
 
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "match": {
-      "content_rating": "Everyone"
-    }
-  }
-}
-```
-
-###########music dans le champ app_name
+###### music dans le champ app_name
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -28,7 +16,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-######diabete dans le champ app_name
+###### diabete dans le champ app_name
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -41,10 +29,10 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-######La recherche sur diabete ne donne rien. Pourquoi ?
-######Utilisation de l'analyzer par défaut qui ne fait pas de stemmisation
+* La recherche sur diabete ne donne rien. Pourquoi ?  
+Utilisation de l'analyzer par défaut qui ne fait pas de stemmisation
 
-######Refaites la recherche avec le token diabetes
+###### Refaites la recherche avec le token diabetes
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -57,11 +45,12 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-######Comment modifier le mapping pour que la recherche donne un résultat avec le token diabete ?
-######Il faut utiliser un analyzer personnalisé ou présent sur étagère pour réduire les mots à leur racine. On peut dans un premier temps tester l'effet d'un analyzer english par exemple car le texte indexé est dans la langue anglaise
-######Dans l'analyse indiquée ci-dessous, on constate que les tokens diabetes et diabete sont réduits à la racine diabete. L'analyzer english présent sur étagère est donc suffisant pour répondre à ce problème
+###### Comment modifier le mapping pour que la recherche donne un résultat avec le token diabete ?
+Il faut utiliser un analyzer personnalisé ou présent sur étagère pour réduire les mots à leur racine. On peut dans un premier temps tester l'effet d'un analyzer english par exemple car le texte indexé est dans la langue anglaise.  
+Dans l'analyse indiquée ci-dessous, on constate que les tokens diabetes et diabete sont réduits à la racine **diabet**. L'analyzer english présent sur étagère est donc suffisant pour répondre à ce problème.
 
-######tester l'analyzer cible
+###### Comment pouvez vous faire des tests d’une solution probable ?
+* Endpoint _analyze avec un un analyzer présent sur étagère
 ```json
 GET /tp_elastic_gstore/_analyze
 {
@@ -72,11 +61,14 @@ GET /tp_elastic_gstore/_analyze
 
 
 
-######Création d'un analyzer spécifique à la langue
-DELETE hol_devoxxfr_gstore_v1
+###### Modifier le mapping pour que la recherche donne un résultat avec le token diabete 
 
-DELETE hol_devoxxfr_gstore_v2
+* Suppression des index
+```
+DELETE hol_devoxxfr_gstore_*
+```
 
+* Création du nouvel index
 ```json
 PUT tp_elastic_gstore_v2
 {
@@ -117,15 +109,19 @@ PUT tp_elastic_gstore_v2
 ```
 
 
-######tester l'analyzer dans l'index créé
+###### Tester la solution choisie avec le endpoint _analyze avant de la mettre en oeuvre (avant le chargement des données).
 ```json
 GET /tp_elastic_gstore/_analyze
 {
   "text": ["diabetes","diabete"],
   "field": "app_name.english"
 }
+```
 
-```json
+###### Charger les données
+
+* Création de l'alias
+```j
 POST /_aliases
 {
     "actions" : [
@@ -134,9 +130,22 @@ POST /_aliases
 }
 ```
 
+* Renommer l'index dans le fichier $HOME/elastic/tp-elastic/data/ls-google-playstore.conf  
+A partir de maintenant, étant donné que l'index est créé avant l'ajout des données, on peut faire pointer l'entrée **index** directement sur l'alias dans la configuration logstash 
+```ruby
+output {
+    stdout { codec => rubydebug }
+    elasticsearch {
+        action => "index"
+        hosts => ["localhost:9200"]
+        index => "tp_elastic_gstore"
+        workers => 1
+    }
+}
+```
 
-#Rechercher de nouveau le token diabete. La recherche devrait être fructueuse si vous avez choisi le mapping adequat
-```json
+###### Rechercher de nouveau le token diabete. La recherche devrait être fructueuse si vous avez choisi le mapping adequat
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -149,7 +158,8 @@ GET /tp_elastic_gstore/_search
 ```
 
 
-######Ré-écrivez la requête en recherchant simultanément sur les champs que vous estimez pertinents tout en boostant les recherches des saisies exactes des utilisateurs.
+###### Ré-écrivez la requête en recherchant simultanément sur les champs que vous estimez pertinents tout en boostant les recherches des saisies exactes des utilisateurs.
+* Le champ ou il y a le moins de modifications des saisies utilisateur est le champ app_name de type text. La seule modification que fait l'analyseur associé à ce champ est une réduction de la casse.
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -164,22 +174,8 @@ GET /tp_elastic_gstore/_search
 ```
 
 
-######Rechercher les documents qui contiennent photos ou art dans le champ app_name
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "draw art",
-      "fields": ["app_name"]
-    }
-  }
-}
+###### Rechercher les documents qui contiennent draw ou art dans le champ app_name
 ```
-
-#Rechercher les documents qui contiennent draw ou art dans le champ app_name
-```json
 GET /tp_elastic_gstore/_search
 {
   "query": {
@@ -191,7 +187,7 @@ GET /tp_elastic_gstore/_search
 ```
 
 ######Rechercher les documents qui contiennent draw et art dans le champ app_name
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -209,11 +205,11 @@ GET /tp_elastic_gstore/_search
 ```
 
 
-#Rechercher les documents qui contiennent 
-#######diabète  dans le champ description 
-#######pour les applications gratuites 
-#######qui ont un rating supérieur à 4.5
-#######qui ont été mises à jour (last_updated) en 2019 
+##### Rechercher les documents qui contiennent 
+* diabète  dans le champ app_name 
+*  pour les applications gratuites 
+*  qui ont un rating supérieur à 4.5
+*  qui ont été mises à jour (last_updated) en 2019 
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -255,7 +251,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-######Rechercher les documents qui contiennent messaging+ dans le champ app_name
+###### Rechercher les documents qui contiennent messaging+ dans le champ app_name
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -269,13 +265,18 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-#On cherche messaging+ mais c’est messaging qui remonte en premier
+###### On cherche messaging+ mais c’est messaging qui remonte en premier
+Modifier le mapping pour rendre possible les deux requêtes suivantes 
+* Une recherche du token messaging+ ne trouve que les documents contenant cette chaîne
+* Lors d’une recherche du token messaging+, les documents le contenant remontent en premier
 
-##Modification du mapping
+    * Modification du mapping
 
+```
 DELETE tp_elastic_gstore_*
+```
 
-```json
+```shell
 PUT tp_elastic_gstore_v3
 {
   "settings": 
@@ -336,7 +337,10 @@ PUT tp_elastic_gstore_v3
   }
 }
 ```
-
+*  
+   * Création de l'index
+    
+    
 ```json
 POST /_aliases
 {
@@ -346,8 +350,7 @@ POST /_aliases
 }
 ```
 
-
-######Tester le nouveau mapping avant le chargement des données
+*   * Tester le nouveau mapping avant le chargement des données
 ```json
 GET /tp_elastic_gstore/_analyze
 {
@@ -356,8 +359,9 @@ GET /tp_elastic_gstore/_analyze
 }
 ```
 
-#######Une recherche du token messaging+ ne trouve que les documents contenant cette chaîne
-```json
+*
+    * Une recherche du token messaging+ ne trouve que les documents contenant cette chaîne
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -367,10 +371,11 @@ GET /tp_elastic_gstore/_search
       "fields": ["app_name.whitespace"]
     }
   }
-}```
+}
+```
 
 
-#######Lors d’une recherche du token messaging+, les documents le contenant remontent en premier
+* * Lors d’une recherche du token messaging+, les documents le contenant remontent en premier
 
 ```json
 GET /tp_elastic_gstore/_search
@@ -386,7 +391,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-######Rechercher les documents qui contiennent le token food dans le champ "category" 
+###### Rechercher les documents qui contiennent le token food dans le champ "category" 
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -401,7 +406,9 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-######La recherche devrait être infructueuse. Comment elargir le spectre de la recherche sans modification du mapping.
+###### La recherche devrait être infructueuse. Comment elargir le spectre de la recherche sans modification du mapping.
+
+* Sans modification du mapping
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -414,12 +421,15 @@ GET /tp_elastic_gstore/_search
   }
 }
 ```
+ 
+* Avec modification du mapping
 
-######Modification du mapping
+    * Suppression des index
 ```
 DELETE tp_elastic_gstore_*
 ```
 
+*    * Création du mapping
 ```json
 PUT tp_elastic_gstore_v4
 {
@@ -500,6 +510,7 @@ PUT tp_elastic_gstore_v4
 }
 ```
 
+*    * Création de l'alias
 ```json
 POST /_aliases
 {
@@ -509,6 +520,7 @@ POST /_aliases
 }
 ```
 
+*    * Query
 ```json
 GET /tp_elastic_gstore/_search
 {
@@ -539,10 +551,13 @@ GET /tp_elastic_gstore/_search
 
 ###### searchAsYouType 
 
-Suppression des anciens index
-DELETE tp_elastic_gstore_*
+* Suppression des anciens index
 
-Création de l'index avec le searchAsYouType
+```
+DELETE tp_elastic_gstore_*
+```
+
+* Création de l'index avec le searchAsYouType
 ```json
 PUT tp_elastic_gstore_v5
 {
@@ -653,7 +668,7 @@ PUT tp_elastic_gstore_v5
 }
 ```
 
-Création de l'alias qui pointe sur l'index nouvellement créé
+* Création de l'alias qui pointe sur l'index nouvellement créé
 ```json
 POST /_aliases
 {
@@ -663,7 +678,7 @@ POST /_aliases
 }
 ```
 
-Test avec le endPoint 
+* Test du nouvel index avec le endPoint _analyze 
 ```json
 GET /tp_elastic_gstore/_analyze
 {
@@ -672,7 +687,7 @@ GET /tp_elastic_gstore/_analyze
 }
 ```
 
-Query
+* Query
 ```json
 GET /tp_elastic_gstore/_search
 {
