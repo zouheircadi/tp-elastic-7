@@ -520,3 +520,168 @@ GET /tp_elastic_gstore/_search
   }
 }  
 ```
+
+###### dyabete
+
+```json
+GET /tp_elastic_gstore/_search
+{
+  "query": 
+  {
+    "multi_match": {
+      "query": "dyabetes",
+      "fields": ["category","app_name","app_name.english","genres","genres.english"],
+      "fuzziness": "AUTO"
+    }
+  }
+}
+```
+
+###### searchAsYouType 
+
+Suppression des anciens index
+DELETE tp_elastic_gstore_*
+
+Création de l'index avec le searchAsYouType
+```json
+PUT tp_elastic_gstore_v5
+{
+  "settings": 
+  {
+    "analysis": 
+    {
+      "filter" : 
+      {
+        "ac_filter" :
+        {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 10
+        }
+      },      
+      "analyzer": 
+      {
+        "ws_analyzer": 
+        {
+          "type": "custom",
+          "tokenizer": "whitespace",
+          "filter": 
+          [
+            "lowercase"
+          ]
+        },
+        "ac_analyzer" : 
+        {
+          "tokenizer" : "standard",
+          "filter" : 
+          ["lowercase", "ac_filter"]
+        }
+      }
+    }
+  }, 
+  "mappings": 
+  {
+      "doc" : 
+      {
+        "properties" : 
+        {
+          "app_name" : 
+          {
+            "type" : "text",
+            "copy_to" : "catch_all",
+            "fields" :
+            {
+              "english" :
+              {
+                "type" : "text",
+                "analyzer" : "english"
+              },
+              "whitespace" :
+              {
+                "type" : "text",
+                "analyzer" : "ws_analyzer"
+              },
+              "autocomplete" :
+              {
+                "type" : "text",
+                "analyzer": "ac_analyzer"
+              }
+            }
+          },
+          "genres" : 
+          {
+            "type" : "text",
+            "copy_to" : "catch_all",            
+            "fields" :
+            {
+              "english" :
+              {
+                "type" : "text",
+                "analyzer" : "english"
+              },
+              "autocomplete" :
+              {
+                "type" : "text",
+                "analyzer": "ac_analyzer"
+              }              
+            }
+          },
+          "category" : 
+          {
+            "type" : "text",
+            "copy_to" : "catch_all",            
+            "fields" :
+            {
+              "keyword" :
+              {
+                "type" : "keyword"
+              },
+              "autocomplete" :
+              {
+                "type" : "text",
+                "analyzer": "ac_analyzer"
+              }              
+            }
+          },          
+          "catch_all" : 
+          {
+            "type" : "text"
+          }          
+        }
+      }
+  }
+}
+```
+
+Création de l'alias qui pointe sur l'index nouvellement créé
+```json
+POST /_aliases
+{
+    "actions" : [
+        { "add" : { "index" : "tp_elastic_gstore_v5", "alias" : "tp_elastic_gstore" } }
+    ]
+}
+```
+
+Test avec le endPoint 
+```json
+GET /tp_elastic_gstore/_analyze
+{
+  "text" : ["dating","diabete"],
+  "field": "app_name.autocomplete"
+}
+```
+
+Query
+```json
+GET /tp_elastic_gstore/_search
+{
+  "query": 
+  {
+    "multi_match": {
+      "query": "D",
+      "fields": ["category.autocomplete","app_name.autocomplete","genres.autocomplete"]
+    }
+  }
+}
+```
