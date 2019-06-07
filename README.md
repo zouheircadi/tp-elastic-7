@@ -4,7 +4,7 @@
 
 
 ###### music dans le champ app_name
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -17,7 +17,7 @@ GET /tp_elastic_gstore/_search
 ```
 
 ###### diabete dans le champ app_name
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -33,7 +33,7 @@ GET /tp_elastic_gstore/_search
 Utilisation de l'analyzer par défaut qui ne fait pas de stemmisation
 
 ###### Refaites la recherche avec le token diabetes
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -51,7 +51,7 @@ Dans l'analyse indiquée ci-dessous, on constate que les tokens diabetes et diab
 
 ###### Comment pouvez vous faire des tests d’une solution probable ?
 * Endpoint _analyze avec un un analyzer présent sur étagère
-```json
+```
 GET /tp_elastic_gstore/_analyze
 {
   "text": ["diabetes","diabete"],
@@ -69,7 +69,7 @@ DELETE hol_devoxxfr_gstore_*
 ```
 
 * Création du nouvel index
-```json
+```
 PUT tp_elastic_gstore_v2
 {
   "mappings": 
@@ -110,7 +110,7 @@ PUT tp_elastic_gstore_v2
 
 
 ###### Tester la solution choisie avec le endpoint _analyze avant de la mettre en oeuvre (avant le chargement des données).
-```json
+```
 GET /tp_elastic_gstore/_analyze
 {
   "text": ["diabetes","diabete"],
@@ -121,7 +121,7 @@ GET /tp_elastic_gstore/_analyze
 ###### Charger les données
 
 * Création de l'alias
-```j
+```
 POST /_aliases
 {
     "actions" : [
@@ -132,7 +132,7 @@ POST /_aliases
 
 * Renommer l'index dans le fichier $HOME/elastic/tp-elastic/data/ls-google-playstore.conf  
 A partir de maintenant, étant donné que l'index est créé avant l'ajout des données, on peut faire pointer l'entrée **index** directement sur l'alias dans la configuration logstash 
-```ruby
+```
 output {
     stdout { codec => rubydebug }
     elasticsearch {
@@ -160,7 +160,7 @@ GET /tp_elastic_gstore/_search
 
 ###### Ré-écrivez la requête en recherchant simultanément sur les champs que vous estimez pertinents tout en boostant les recherches des saisies exactes des utilisateurs.
 * Le champ ou il y a le moins de modifications des saisies utilisateur est le champ app_name de type text. La seule modification que fait l'analyseur associé à ce champ est une réduction de la casse.
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -210,7 +210,7 @@ GET /tp_elastic_gstore/_search
 *  pour les applications gratuites 
 *  qui ont un rating supérieur à 4.5
 *  qui ont été mises à jour (last_updated) en 2019 
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -252,7 +252,7 @@ GET /tp_elastic_gstore/_search
 ```
 
 ###### Rechercher les documents qui contiennent messaging+ dans le champ app_name
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -337,11 +337,10 @@ PUT tp_elastic_gstore_v3
   }
 }
 ```
-*  
-   * Création de l'index
+*  * Création de l'index
     
     
-```json
+```
 POST /_aliases
 {
     "actions" : [
@@ -351,7 +350,7 @@ POST /_aliases
 ```
 
 *   * Tester le nouveau mapping avant le chargement des données
-```json
+```
 GET /tp_elastic_gstore/_analyze
 {
   "text": ["messaging+","messaging"],
@@ -377,7 +376,7 @@ GET /tp_elastic_gstore/_search
 
 * * Lors d’une recherche du token messaging+, les documents le contenant remontent en premier
 
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -392,7 +391,7 @@ GET /tp_elastic_gstore/_search
 ```
 
 ###### Rechercher les documents qui contiennent le token food dans le champ "category" 
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -409,7 +408,7 @@ GET /tp_elastic_gstore/_search
 ###### La recherche devrait être infructueuse. Comment elargir le spectre de la recherche sans modification du mapping.
 
 * Sans modification du mapping
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -430,7 +429,7 @@ DELETE tp_elastic_gstore_*
 ```
 
 *    * Création du mapping
-```json
+```
 PUT tp_elastic_gstore_v4
 {
   "settings": 
@@ -511,7 +510,7 @@ PUT tp_elastic_gstore_v4
 ```
 
 *    * Création de l'alias
-```json
+```
 POST /_aliases
 {
     "actions" : [
@@ -521,7 +520,7 @@ POST /_aliases
 ```
 
 *    * Query
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -535,7 +534,7 @@ GET /tp_elastic_gstore/_search
 
 ###### dyabete
 
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
@@ -558,7 +557,7 @@ DELETE tp_elastic_gstore_*
 ```
 
 * Création de l'index avec le searchAsYouType
-```json
+```
 PUT tp_elastic_gstore_v5
 {
   "settings": 
@@ -619,7 +618,8 @@ PUT tp_elastic_gstore_v5
               "autocomplete" :
               {
                 "type" : "text",
-                "analyzer": "ac_analyzer"
+                "analyzer": "ac_analyzer",
+                "search_analyzer" : "standard"
               }
             }
           },
@@ -637,7 +637,8 @@ PUT tp_elastic_gstore_v5
               "autocomplete" :
               {
                 "type" : "text",
-                "analyzer": "ac_analyzer"
+                "analyzer": "ac_analyzer",
+                "search_analyzer" : "standard"
               }              
             }
           },
@@ -654,7 +655,8 @@ PUT tp_elastic_gstore_v5
               "autocomplete" :
               {
                 "type" : "text",
-                "analyzer": "ac_analyzer"
+                "analyzer": "ac_analyzer",
+                "search_analyzer" : "standard"
               }              
             }
           },          
@@ -669,7 +671,7 @@ PUT tp_elastic_gstore_v5
 ```
 
 * Création de l'alias qui pointe sur l'index nouvellement créé
-```json
+```
 POST /_aliases
 {
     "actions" : [
@@ -679,7 +681,7 @@ POST /_aliases
 ```
 
 * Test du nouvel index avec le endPoint _analyze 
-```json
+```
 GET /tp_elastic_gstore/_analyze
 {
   "text" : ["dating","diabete"],
@@ -688,7 +690,7 @@ GET /tp_elastic_gstore/_analyze
 ```
 
 * Query
-```json
+```
 GET /tp_elastic_gstore/_search
 {
   "query": 
