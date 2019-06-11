@@ -3,7 +3,7 @@
 
 
 ###### Recherchez les applications ayant les tokens network social ou dating dans le app_name
-* 1 - Avec une agrégation sur le champ category
+* 1.1 - Avec une agrégation sur le champ category
 
 ```
 GET /tp_elastic_gstore/_search
@@ -26,7 +26,32 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-* 2 - Avec une agrégation sur le champ rating sur l’étendu des valeurs possibles avec un intervalle de 1
+* 1.2 - Trier la requête précédente sur la key  
+```
+GET /tp_elastic_gstore/_search
+{
+  "size": 0, 
+  "query": 
+  {
+    "match": {
+      "app_name": "network social dating"
+    }
+  },
+  "aggs": {
+    "categories": {
+      "terms": {
+        "field": "category.keyword",
+        "size": 10,
+        "order": {
+          "_key": "asc"
+        }
+      }
+    }
+  }
+}
+```
+
+* 2.1 - Avec une agrégation sur le champ rating sur l’étendu des valeurs possibles avec un intervalle de 1
 
 ```
 GET /tp_elastic_gstore/_search
@@ -49,6 +74,34 @@ GET /tp_elastic_gstore/_search
   }
 }
 ```
+
+
+* 2.2 - Trier la requête précédente sur le doc_count  
+```
+GET /tp_elastic_gstore/_search
+{
+  "size": 0, 
+  "query": 
+  {
+    "match": {
+      "app_name": "network social dating"
+    }
+  },
+  "aggs": {
+    "ratings" : 
+    {
+      "histogram": {
+        "field": "rating",
+        "interval": 1,
+        "order": {
+          "_count": "desc"
+        }
+      }
+    }
+  }
+}
+```
+
 
 * 3 Avec une aggregation sur le rating pour les intervalles ci-dessous
     * strictement inférieure à 4.0, 
