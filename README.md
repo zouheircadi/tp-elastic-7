@@ -49,7 +49,6 @@ POST  tp_elastic_formations/_doc/_bulk
 ```
 
 ###### 2-RequeteGeo
-### <a id="RequeteGeo"></a>
   
 ```
 GET /tp_elastic_formations/_search
