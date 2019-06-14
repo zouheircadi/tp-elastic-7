@@ -2,7 +2,7 @@
 ### Jeu d'essai
 
 
-###### Commande REST de type POST à exécuter pour charger le jeu d'essai 
+###### 1- Commande REST de type POST à exécuter pour charger le jeu d'essai 
 
 ```shell
 POST  tp_elastic_formations/_doc/_bulk
@@ -46,6 +46,106 @@ POST  tp_elastic_formations/_doc/_bulk
 {"course" : "Elasticsearch Engineer I", "start_date" : "2019-07-01", "end_date" : "2019-07-02", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"}}
 { "index": { "_id":20}}
 {"course" : "Elasticsearch Engineer II", "start_date" : "2019-07-03", "end_date" : "2019-07-04", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"}}
-
 ```
 
+######2-RequeteGeo  
+```
+GET /tp_elastic_formations/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "match_all": {}
+        }
+      ],
+      "filter": {
+        "geo_distance": {
+          "distance": "240km",
+          "location": {
+            "lat": 50.63297,
+            "lon": 3.05858
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+###### 3-  
+
+Diagnostic du problème  
+Faites un GET sur l'index pour constater de visu la structure inférée pour le type location
+```
+GET DELETE tp_elastic_formations
+```
+ 
+Si on isole la partie spécifique au type location, on constate qu'il est créé [comme un objet](https://www.elastic.co/guide/en/elasticsearch/reference/current/object.html)
+
+```
+  "location": {
+    "properties": {
+      "lat": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "lon": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      }
+    }
+  }
+``` 
+
+Le type geo-point ne peut pas être inféré. Il faut le créer explicitement. 
+
+Supprimer l'index
+```
+DELETE tp_elastic_formations
+```
+
+Créer l'index avec le mapping adequat de type geopoint
+```
+PUT tp_elastic_formations
+{
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "course" : 
+        {
+          "type" : "text",
+          "fields" : 
+          {
+            "key" : 
+            {
+              "type" : "keyword"
+            }
+          }
+        },
+        "start_date" : {"type" : "date"},
+        "end_date" : {"type" : "date"},
+        "country" : {"type" : "keyword"},
+        "city" : {"type" : "keyword"},        
+        "location": {
+          "type": "geo_point"
+        }
+      }
+    }
+  }
+}
+```
+
+
+######4- 
+Exécuter de nouveau la [requête précédente](2-RequeteGeo)
