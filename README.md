@@ -2,8 +2,8 @@
 ### Corpus Google playstore
 
 
-###### Recherchez les applications ayant les tokens network social ou dating dans le app_name
-* 1.1 - Avec une agrégation sur le champ category
+###### a- Recherchez les applications ayant les tokens network social ou dating dans le app_name
+* a-1-1 - Avec une agrégation sur le champ category
 
 ```
 GET /tp_elastic_gstore/_search
@@ -26,7 +26,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-* 1.2 - Trier la requête précédente sur la key  
+* a-1-2 - Trier la requête précédente sur la key  
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -51,7 +51,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-* 2.1 - Avec une agrégation sur le champ rating sur l’étendu des valeurs possibles avec un intervalle de 1
+* a-2.1 - Avec une agrégation sur le champ rating sur l’étendu des valeurs possibles avec un intervalle de 1
 
 ```
 GET /tp_elastic_gstore/_search
@@ -76,7 +76,7 @@ GET /tp_elastic_gstore/_search
 ```
 
 
-* 2.2 - Trier la requête précédente sur le doc_count  
+* a-2.2  Trier la requête précédente sur le doc_count  
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -103,12 +103,12 @@ GET /tp_elastic_gstore/_search
 ```
 
 
-* 3 Avec une aggregation sur le rating pour les intervalles ci-dessous
+* a-3 Avec une aggregation sur le rating pour les intervalles ci-dessous
     * strictement inférieure à 4.0, 
     * entre 4.0 et 4.5, 
     * supérieure ou égale à 4.5
 
-        * 3.1 - le tri se fait sur l'ordre alphanumérique des clés
+        * a-3-1 - le tri se fait sur l'ordre alphanumérique des clés
 
 ```
 GET /tp_elastic_gstore/_search
@@ -134,7 +134,7 @@ GET /tp_elastic_gstore/_search
   }
 }
 ```
-* * * 3-2 Nommage des clés pour bénéficier du tri alphanumérique
+* * * a-3-2 Nommage des clés pour bénéficier du tri alphanumérique
         
 ```
 GET /tp_elastic_gstore/_search
@@ -161,7 +161,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-*  4 Avec l’agrégation 1 (category : agrégation mère) à laquelle on imbrique l’agrégation 3 (agrégation fille)
+*  a-4 Avec l’agrégation 1 (category : agrégation mère) à laquelle on imbrique l’agrégation 3 (agrégation fille)
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -195,9 +195,9 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-###### Combien d’application ayant music dans le champ app_name ont un rating de 4.5 ou plus ?
-
-* Avant la version 7, on pouvait le faire avec un filtre
+###### b- Combien d’application ayant music dans le champ app_name ont un rating de 4.5 ou plus ?
+Cet exercice a pour but de mettre en évidence une contrainte apparue dans Elasticsearch depuis la version 7
+* b-1 Avant la version 7, on pouvait le faire avec un filtre
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -224,7 +224,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-* Si la version est supérieure à la 6, il faut le faire avec une agrégation
+* b-2 Si la version est supérieure à la 6, le moteur ne garantit plus la précision du nombre de hits (par défaut au delà de 10000). Il est possible de le faire avec une agrégation.  Voir documentation officielle sur [track total hits](https://www.elastic.co/guide/en/elasticsearch/reference/master/search-request-track-total-hits.html)
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -248,7 +248,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-###### Quel est le nombre d’applications agrégées par tranche de 3 mois pour l’année 2017 ?
+###### c- Quel est le nombre d’applications agrégées par tranche de 3 mois pour l’année 2017 ?
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -281,7 +281,7 @@ GET /tp_elastic_gstore/_search
 ```
 
 ##### Metrics
-######  Trouver la plus petite et la plus grande valeur pour le champ last_updated ?
+######  d- Trouver la plus petite et la plus grande valeur pour le champ last_updated ?
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -303,7 +303,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-###### Reprendre le 4 et ajouter la moyenne pour chaque sous-imbrication
+###### e- 
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -344,10 +344,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-###### Rechercher les documents 
-* qui contiennent  "network social dating" dans le champ app_name 
-* puis agrégez les par catégories (limité à 5) 
-* et trouver la note moyenne (rating) pour chaque category
+###### f
 
 ```
 GET /tp_elastic_gstore/_search
@@ -380,10 +377,7 @@ GET /tp_elastic_gstore/_search
 }
 ```
 
-###### Rechercher les documents 
-* qui contiennent  "network social dating" dans le champ app_name 
-* puis agrégez les par catégories (limité à 5) 
-* et afficher les statistiques étendues (extended_stats) pour chaque category
+###### g
 ```
 GET /tp_elastic_gstore/_search
 {
@@ -407,6 +401,146 @@ GET /tp_elastic_gstore/_search
         "avg_rating": {
           "extended_stats": {
             "field": "rating"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+
+###### deep metrics
+
+###### h
+
+```
+GET /tp_elastic_gstore/_search
+{
+  "size": 0, 
+  "aggs": {
+    "download": {
+      "terms": {
+        "field": "installs.keyword",
+        "size": 10,
+        "order": {
+          "categories>average": "desc"
+        }
+      },
+      "aggs": {
+        "categories": 
+        {
+          "filter": 
+          {
+            "term": {
+              "category.keyword": "GAME"
+            }
+          },
+          "aggs": {
+            "average": {
+              "avg": {
+                "field": "rating"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+###### bucket_sort
+###### x
+* Faites une agrégation de type terms sur le champ download 
+* puis une autre agrégation imbriquée sur de type filters sur les champs category pour le termes FAMILY, GAME et TOOLS
+* puis une agrégation imbriquée de type average sur le champ rating (moyennes par categorie)
+* et faites un bucket_sort sur les moyennes avec un size de 3
+
+```
+GET /tp_elastic_gstore/_search
+{
+  "size": 0, 
+  "aggs": {
+    "downloads": {
+      "terms": {
+        "field": "installs.keyword",
+        "size": 20
+      },
+      "aggs": 
+      {
+        "ratings" : 
+        {
+          "terms": 
+          {
+            "field": "category.keyword",
+            "size": 10
+          },
+          "aggs": 
+          {
+            "average_rating": 
+            {
+              "avg": {"field": "rating"}
+            },
+            "custom_bs" :
+            {
+              "bucket_sort": {
+                "sort": 
+                [
+                  {"average_rating" : {"order": "desc"}}
+                ],
+                "size": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+
+###### j
+* Faites une agrégation de type terms sur le champ download 
+* puis une autre agrégation imbriquée de type terms sur le champ category avec un size de 10
+* puis une agrégation imbriquée de type average sur le champ rating (moyennes par categorie)
+* et faites un bucket_sort sur les moyennes avec un size de 5
+
+```
+GET /tp_elastic_gstore/_search
+{
+  "size": 0, 
+  "aggs": {
+    "downloads": {
+      "terms": {
+        "field": "installs.keyword",
+        "size": 20
+      },
+      "aggs": 
+      {
+        "ratings" : 
+        {
+          "terms": 
+          {
+            "field": "category.keyword",
+            "size": 10
+          },
+          "aggs": 
+          {
+            "average_rating": 
+            {
+              "avg": {"field": "rating"}
+            },
+            "custom_bs" :
+            {
+              "bucket_sort": {
+                "sort": 
+                [
+                  {"average_rating" : {"order": "desc"}}
+                ],
+                "size": 5
+              }
+            }
           }
         }
       }
