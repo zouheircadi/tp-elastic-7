@@ -449,8 +449,10 @@ GET /tp_elastic_gstore/_search
   }
 }
 ```
-###### bucket_sort
-###### x
+
+##### [bucket_sort](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-pipeline-bucket-sort-aggregation.html)
+###### i
+
 * Faites une agrégation de type terms sur le champ download 
 * puis une autre agrégation imbriquée sur de type filters sur les champs category pour le termes FAMILY, GAME et TOOLS
 * puis une agrégation imbriquée de type average sur le champ rating (moyennes par categorie)
