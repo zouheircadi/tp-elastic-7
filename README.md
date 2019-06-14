@@ -48,7 +48,9 @@ POST  tp_elastic_formations/_doc/_bulk
 {"course" : "Elasticsearch Engineer II", "start_date" : "2019-07-03", "end_date" : "2019-07-04", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"}}
 ```
 
-######2-RequeteGeo  
+###### 2-RequeteGeo
+### <a id="RequeteGeo"></a>
+  
 ```
 GET /tp_elastic_formations/_search
 {
@@ -148,4 +150,4 @@ PUT tp_elastic_formations
 
 
 ######4- 
-Exécuter de nouveau la [requête précédente](2-RequeteGeo)
+Exécuter de nouveau la [requête précédente](#2-RequeteGeo)
