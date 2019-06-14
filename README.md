@@ -1,416 +1,51 @@
-## Les agrégations
-### Corpus Google playstore
+## Les données géographiques
+### Jeu d'essai
 
 
-###### Recherchez les applications ayant les tokens network social ou dating dans le app_name
-* 1.1 - Avec une agrégation sur le champ category
+###### Commande REST de type POST à exécuter pour charger le jeu d'essai 
+
+```shell
+POST  tp_elastic_formations/_doc/_bulk
+{ "index": { "_id":1}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-09-16", "end_date" : "2019-09-17", "city" : "Zurich", "country" : "Switzerland","location" : {"lat":"47.3769","lon":"8.5417"}}
+{ "index": { "_id":2}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-09-18", "end_date" : "2019-09-19", "city" : "Zurich", "country" : "Switzerland","location" : {"lat":"47.3769","lon":"8.5417"}}
+{ "index": { "_id":3}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-06-17", "end_date" : "2019-06-18", "city" : "Brussels", "country" : "Belgium","location" : {"lat":"50.85045","lon":"4.34878"}}
+{ "index": { "_id":4}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-06-19", "end_date" : "2019-06-20", "city" : "Brussels", "country" : "Belgium","location" : {"lat":"50.85045","lon":"4.34878"}}
+{ "index": { "_id":5}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-07-22", "end_date" : "2019-07-23", "city" : "London", "country" : "UK","location" : {"lat":"51.50853","lon":"-0.12574"}}
+{ "index": { "_id":6}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-07-24", "end_date" : "2019-07-25", "city" : "London", "country" : "UK","location" : {"lat":"51.50853","lon":"-0.12574"}}
+{ "index": { "_id":7}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-09-23", "end_date" : "2019-09-24", "city" : "Paris", "country" : "France","location" : {"lat":"48.85341","lon":"2.3488"}}
+{ "index": { "_id":8}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-09-25", "end_date" : "2019-09-26", "city" : "Paris", "country" : "France","location" : {"lat":"48.85341","lon":"2.3488"}}
+{ "index": { "_id":9}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-08-19", "end_date" : "2019-08-20", "city" : "Istamboul", "country" : "Turkey","location" : {"lat":"41.01384","lon":"28.94966"}}
+{ "index": { "_id":10}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-08-21", "end_date" : "2019-08-22", "city" : "Istamboul", "country" : "Turkey","location" : {"lat":"41.01384","lon":"28.94966"}}
+{ "index": { "_id":11}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-07-15", "end_date" : "2019-07-16", "city" : "Amsterdam", "country" : "Netherlands","location" : {"lat":"52.37403","lon":"4.88969"}}
+{ "index": { "_id":12}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-07-17", "end_date" : "2019-07-18", "city" : "Amsterdam", "country" : "Netherlands","location" : {"lat":"52.37403","lon":"4.88969"}}
+{ "index": { "_id":13}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-09-02", "end_date" : "2019-09-03", "city" : "Frankfurt", "country" : "Germany","location" : {"lat":"50.11552","lon":"8.68417"}}
+{ "index": { "_id":14}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-09-04", "end_date" : "2019-09-05", "city" : "Frankfurt", "country" : "Germany","location" : {"lat":"50.11552","lon":"8.68417"}}
+{ "index": { "_id":15}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-09-30", "end_date" : "2019-10-01", "city" : "Milan", "country" : "Italy","location" : {"lat":"45.46427","lon":"9.18951"}}
+{ "index": { "_id":16}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-10-02", "end_date" : "2019-10-03", "city" : "Milan", "country" : "Italy","location" : {"lat":"45.46427","lon":"9.18951"}}
+{ "index": { "_id":17}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-07-01", "end_date" : "2019-07-02", "city" : "Hamburg", "country" : "Germany","location" : {"lat":"53.57532","lon":"10.01534"}}
+{ "index": { "_id":18}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-07-03", "end_date" : "2019-07-04", "city" : "Hamburg", "country" : "Germany","location" : {"lat":"53.57532","lon":"10.01534"}}
+{ "index": { "_id":19}}
+{"course" : "Elasticsearch Engineer I", "start_date" : "2019-07-01", "end_date" : "2019-07-02", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"}}
+{ "index": { "_id":20}}
+{"course" : "Elasticsearch Engineer II", "start_date" : "2019-07-03", "end_date" : "2019-07-04", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"}}
 
 ```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": {
-    "categories": {
-      "terms": {
-        "field": "category.keyword",
-        "size": 10
-      }
-    }
-  }
-}
-```
 
-* 1.2 - Trier la requête précédente sur la key  
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": {
-    "categories": {
-      "terms": {
-        "field": "category.keyword",
-        "size": 10,
-        "order": {
-          "_key": "asc"
-        }
-      }
-    }
-  }
-}
-```
-
-* 2.1 - Avec une agrégation sur le champ rating sur l’étendu des valeurs possibles avec un intervalle de 1
-
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": {
-    "ratings" : 
-    {
-      "histogram": {
-        "field": "rating",
-        "interval": 1
-      }
-    }
-  }
-}
-```
-
-
-* 2.2 - Trier la requête précédente sur le doc_count  
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": {
-    "ratings" : 
-    {
-      "histogram": {
-        "field": "rating",
-        "interval": 1,
-        "order": {
-          "_count": "desc"
-        }
-      }
-    }
-  }
-}
-```
-
-
-* 3 Avec une aggregation sur le rating pour les intervalles ci-dessous
-    * strictement inférieure à 4.0, 
-    * entre 4.0 et 4.5, 
-    * supérieure ou égale à 4.5
-
-        * 3.1 - le tri se fait sur l'ordre alphanumérique des clés
-
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": {
-    "filtered-ratings" : 
-    {
-      "filters": {
-        "filters": {
-          "low"    :{ "range": { "rating": { "lt": 4 }}},
-          "Medium" :{ "range": { "rating": { "gte": 4 , "lt": 4.5}}},
-          "high"   :{ "range": { "rating": { "gte": 4.5 }}}
-        }
-      }
-    }
-  }
-}
-```
-* * * 3-2 Nommage des clés pour bénéficier du tri alphanumérique
-        
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": {
-    "filtered-ratings" : 
-    {
-      "filters": {
-        "filters": {
-          "1-low"    :{ "range": { "rating": { "lt": 4 }}},
-          "2-medium" :{ "range": { "rating": { "gte": 4 , "lt": 4.5}}},
-          "3-high"   :{ "range": { "rating": { "gte": 4.5 }}}
-        }
-      }
-    }
-  }
-}
-```
-
-*  4 Avec l’agrégation 1 (category : agrégation mère) à laquelle on imbrique l’agrégation 3 (agrégation fille)
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": {
-    "categories": {
-      "terms": {
-        "field": "category.keyword",
-        "size": 5
-      },
-      "aggs": {
-        "filtered-ratings" : 
-        {
-          "filters": {
-            "filters": {
-              "1-low"    :{ "range": { "rating": { "lt": 4 }}},
-              "2-medium" :{ "range": { "rating": { "gte": 4 , "lt": 4.5}}},
-              "3-high"   :{ "range": { "rating": { "gte": 4.5 }}}
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-###### Combien d’application ayant music dans le champ app_name ont un rating de 4.5 ou plus ?
-
-* Avant la version 7, on pouvait le faire avec un filtre
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 10,
-  "query": 
-  {
-    "bool": 
-    {
-      "must": [
-        {"match": {
-          "app_name": "music"
-        }}
-      ],
-      "filter": 
-      {
-        "range": {
-          "rating": {
-            "gte": 4.5
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-* Si la version est supérieure à la 6, il faut le faire avec une agrégation
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0,
-  "query": 
-  {
-    "match": {
-      "app_name": "music"
-    }
-  },
-  "aggs": {
-    "filtered-ratings" : 
-    {
-      "filters": {
-        "filters": {
-          "3-high"   :{ "range": { "rating": { "gte": 4.5 }}}
-        }
-      }
-    }
-  }
-}
-```
-
-###### Quel est le nombre d’applications agrégées par tranche de 3 mois pour l’année 2017 ?
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "bool": 
-    {
-      "filter": 
-      {
-        "range": {
-          "last_updated": {
-            "gte": "2016-12-31T23:59:59.000Z",
-            "lt": "2018-01-01T00:00:00.000Z"
-          }
-        }
-      }
-    }
-  }, 
-  "aggs": {
-    "minmax" : 
-    {
-      "date_histogram": {
-        "field": "last_updated",
-        "interval": "quarter"
-      }
-    }
-  }
-}
-```
-
-##### Metrics
-######  Trouver la plus petite et la plus grande valeur pour le champ last_updated ?
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "aggs": {
-    "min" : 
-    {
-      "min": {
-        "field": "last_updated"
-      }
-    },
-    "max" : 
-    {
-      "max": {
-        "field": "last_updated"
-      }
-    }
-  }
-}
-```
-
-###### Reprendre le 4 et ajouter la moyenne pour chaque sous-imbrication
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": 
-  {
-    "categories": 
-    {
-      "terms": 
-      {
-        "field": "category.keyword",
-        "size": 5
-      },
-      "aggs": {
-        "filtered-ratings" : 
-        {
-          "filters": {
-            "filters": {
-              "1-low - x < 4"    :{ "range": { "rating": { "lt": 4 }}},
-              "2-medium - 4 < x <= 4.5" :{ "range": { "rating": { "gte": 4 , "lt": 4.5}}},
-              "3-high - x > 4.5"   :{ "range": { "rating": { "gte": 4.5 }}}
-            }
-          },
-            "aggs": 
-            {
-              "avg_rating": {"avg": {"field": "rating"}}
-            }          
-        }
-      }
-    }
-  }
-}
-```
-
-###### Rechercher les documents 
-* qui contiennent  "network social dating" dans le champ app_name 
-* puis agrégez les par catégories (limité à 5) 
-* et trouver la note moyenne (rating) pour chaque category
-
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": 
-  {
-    "categories": 
-    {
-      "terms": 
-      {
-        "field": "category.keyword",
-        "size": 5
-      },
-      "aggs": {
-        "avg_rating": {
-          "avg": {
-            "field": "rating"
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-###### Rechercher les documents 
-* qui contiennent  "network social dating" dans le champ app_name 
-* puis agrégez les par catégories (limité à 5) 
-* et afficher les statistiques étendues (extended_stats) pour chaque category
-```
-GET /tp_elastic_gstore/_search
-{
-  "size": 0, 
-  "query": 
-  {
-    "match": {
-      "app_name": "network social dating"
-    }
-  },
-  "aggs": 
-  {
-    "categories": 
-    {
-      "terms": 
-      {
-        "field": "category.keyword",
-        "size": 5
-      },
-      "aggs": {
-        "avg_rating": {
-          "extended_stats": {
-            "field": "rating"
-          }
-        }
-      }
-    }
-  }
-}
-```
