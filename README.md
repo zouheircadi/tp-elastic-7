@@ -34,7 +34,7 @@ GET tp_elastic_mq/_search?explain=true
 }      
 ```   
 ###### Explain pour le document d'identifiant 3
-GET /tp_elastic_mq/_doc/3/_explain/
+GET /tp_elastic_mq/_explain/3
 {
   "query": 
   {
