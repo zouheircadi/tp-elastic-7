@@ -4,7 +4,7 @@
 
 ###### inject data
 ```shell
-POST /tp_elastic_mf1/_doc/_bulk
+POST /tp_elastic_mf1/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "draw pixel art number", "genres" : "Art & Design;Creativity"}
 { "index": { "_id": 2 }}
