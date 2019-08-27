@@ -7,7 +7,7 @@
 Les trois requêtes ci-dessous de type filtre ne retournent aucun résultat
 * constant score query
 ```shell
-GET /tp_elastic_11/_doc/_search
+GET /tp_elastic_11/_search
 {
     "query" : {
         "constant_score" : {
@@ -107,7 +107,7 @@ GET /tp_elastic_11/_analyze
 
 
 ```shell
-GET /tp_elastic_11/_doc/_search
+GET /tp_elastic_11/_search
 {
     "query" : {
         "constant_score" : {
@@ -124,7 +124,7 @@ GET /tp_elastic_11/_doc/_search
 
 * Pour l'index tp_elastic_14, on peut interroger le champ category pour lequel on a fixé le mapping
 ```shell
-GET /tp_elastic_14/_doc/_search
+GET /tp_elastic_14/_search
 {
     "query" : {
         "constant_score" : {
