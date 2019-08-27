@@ -4,8 +4,6 @@ PUT /hol_devoxxfr_pm1
 {
   "mappings": 
   {
-    "_doc" :
-    {
       "properties" : 
       {
         "code" : 
@@ -17,11 +15,10 @@ PUT /hol_devoxxfr_pm1
           "type" : "keyword"
         }
       }
-    }
   }
 }
 
-POST /hol_devoxxfr_pm1/_doc/_bulk
+POST /hol_devoxxfr_pm1/_bulk
 { "index": {  }}
 {"code":"AFG","country":"Afghanistan"}
 { "index": {  }}
