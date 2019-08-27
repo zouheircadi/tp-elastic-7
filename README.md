@@ -16,8 +16,6 @@ PUT /tp_elastic_14
 {
   "mappings": 
   {
-    "_doc":
-    {
       "properties": 
       {
         "app_name" : {"type": "text"},
@@ -25,14 +23,13 @@ PUT /tp_elastic_14
         "last_updated" : {"type": "date"},
         "rating" : {"type": "double"}      
       }      
-    }
   }
 }
 ```
 
 Indexer les données avec la requête REST ci-dessous
 ```shell
-POST /tp_elastic_14/_doc/_bulk
+POST /tp_elastic_14/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor", "category" : "ART-AND-DESIGN", "last_updated" : "2018-01-06","rating" : 4.1}
 { "index": { "_id": 2 }}
