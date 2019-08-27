@@ -1,6 +1,6 @@
-DELETE  /hol_devoxxfr_pm1
+DELETE  /tp_elastic_pm1
 
-PUT /hol_devoxxfr_pm1
+PUT /tp_elastic_pm1
 {
   "mappings": 
   {
@@ -18,7 +18,7 @@ PUT /hol_devoxxfr_pm1
   }
 }
 
-POST /hol_devoxxfr_pm1/_bulk
+POST /tp_elastic_pm1/_bulk
 { "index": {  }}
 {"code":"AFG","country":"Afghanistan"}
 { "index": {  }}
