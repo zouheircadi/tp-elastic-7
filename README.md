@@ -4,7 +4,7 @@
 Créer un index par injection de données avec le POST ci-dessous. L’index créé devrait logiquement avoir les caractéristiques définies dans le template
       
 ```shell
-POST /tp_elastic_13/_doc/_bulk
+POST /tp_elastic_13/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor", "category" : "ART-AND-DESIGN", "last_updated" : "2018-01-06","rating" : 4.1}
 { "index": { "_id": 2 }}
