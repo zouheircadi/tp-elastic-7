@@ -4,7 +4,7 @@
 
 ###### Créer un premier index en mode autocréation avec la requête ci-dessous
 ```shell
-POST /tp_elastic_151/_doc/_bulk
+POST /tp_elastic_151/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor", "category" : "ART-AND-DESIGN", "last_updated" : "2018-01-06","rating" : 4.1}
 { "index": { "_id": 2 }}
@@ -43,7 +43,7 @@ PUT /tp_elastic_15/_doc/5
 
 ###### Créer un deuxième index en mode autocréation avec la requête ci-dessous
 ```shell
-POST /tp_elastic_152/_doc/_bulk
+POST /tp_elastic_152/_bulk
 { "index": { "_id": 6 }}      
 { "app_name" : "Diabetes:M", "category" : "MEDICAL", "last_updated" : "2018-07-31", "rating" : 4.6}      
 ```
