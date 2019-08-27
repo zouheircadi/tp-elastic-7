@@ -5,7 +5,7 @@
 ##### Création index de travail
 
 ```shell     
-POST /tp_elastic_mp1/_doc/_bulk
+POST /tp_elastic_mp1/_bulk
 { "index": { "_id": 1 }}
 { "title": "Je ne suis pas content. Service client nul" }
 { "index": { "_id": 2 }}
