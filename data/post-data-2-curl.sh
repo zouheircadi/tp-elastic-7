@@ -1,7 +1,7 @@
 
-curl -XDELETE "http://localhost:9200/hol_devoxxfr_pm2"
+curl -XDELETE "http://localhost:9200/tp_elastic_pm2"
 
-curl -XPUT "http://localhost:9200/hol_devoxxfr_pm2" -H 'Content-Type: application/json' -d'
+curl -XPUT "http://localhost:9200/tp_elastic_pm2" -H 'Content-Type: application/json' -d'
 {
   "mappings": 
   {
@@ -29,7 +29,7 @@ curl -XPUT "http://localhost:9200/hol_devoxxfr_pm2" -H 'Content-Type: applicatio
   }
 }'
 
-curl -XPOST "http://localhost:9200/hol_devoxxfr_pm2/_doc/_bulk" -H 'Content-Type: application/json' -d'
+curl -XPOST "http://localhost:9200/tp_elastic_pm2/_doc/_bulk" -H 'Content-Type: application/json' -d'
 { "index": {  }}
 {"code":"AFG","country":"Afghanistan"}
 { "index": {  }}

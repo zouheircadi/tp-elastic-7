@@ -7,7 +7,7 @@
 DELETE tp_elastic_pm3
 ```
 
-```shell
+```json
 PUT /tp_elastic_pm3
 {
   "settings": 
@@ -40,8 +40,6 @@ PUT /tp_elastic_pm3
   }, 
   "mappings": 
   {
-    "_doc" :
-    {
       "properties" : 
       {
         "code" : 
@@ -66,7 +64,6 @@ PUT /tp_elastic_pm3
           }
         }
       }
-    }
   }
 }
 ```
