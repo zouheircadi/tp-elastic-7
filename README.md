@@ -5,126 +5,39 @@
 
 ###### Mapping inféré après chargement des données
 ```json
+
+```
+
+Utilisez logstash pour charger le fichier googleplaystore.csv
+```shell
+$LOGSTATSH_INSTALL_DIR/7.3.1/bin/logstash -f /tp-elastic/tp-elastic-7/data/ls-google-playstore.conf
+```
+
+Tester la création de l’index
+###### Test de l'existence
+```shell
+HEAD tp_elastic_gstore_v1
+``` 
+
+Contrôler le mapping (voir exemple de mapping inféré sur la branche git).
+```shell
+GET tp_elastic_gstore_v1
+```
+
+Faites un count pour compter la totalité des documents de l’index
+```shell
+GET tp_elastic_gstore_v1/_count
+```
+
+
+Si la création de l’index est ok, créer un alias appelé tp_elastic_gstore vers l’index tp_elastic_gstore_v1.
+```json
+GET /tp_elastic_gstore/_search
 {
-  "tp_elastic_gstore_v1" : {
-    "aliases" : { },
-    "mappings" : {
-      "properties" : {
-        "@timestamp" : {
-          "type" : "date"
-        },
-        "android_ver" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "app_name" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "category" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "content_rating" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "current_ver" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "genres" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "installs" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "last_updated" : {
-          "type" : "date"
-        },
-        "price" : {
-          "type" : "float"
-        },
-        "rating" : {
-          "type" : "float"
-        },
-        "reviews" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "size" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "type" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        }
-      }
-    },
-    "settings" : {
-      "index" : {
-        "creation_date" : "1566987134530",
-        "number_of_shards" : "1",
-        "number_of_replicas" : "1",
-        "uuid" : "HQD0gqrQQI2rLsNjZcaJ6w",
-        "version" : {
-          "created" : "7030199"
-        },
-        "provided_name" : "tp_elastic_gstore_v1"
-      }
+  "query": 
+  {
+    "match": {
+      "content_rating": "Everyone"
     }
   }
 }
