@@ -1,4 +1,4 @@
-VERSION=7.1.1
+VERSION=7.3.1
 ELASTIC_BIN=elasticsearch-${VERSION}.tar.gz
 ELASTIC_MACOS_BIN=elasticsearch-${VERSION}-darwin-x86_64.tar.gz
 ELASTIC_MACOS_FOLDER=elasticsearch-${VERSION}-darwin-x86_64
@@ -19,6 +19,9 @@ mkdir -p $HOME/elastic/downloads ; cd $HOME/elastic
 
 
 OS="`uname`"
+
+alias BEGINCOMMENT="if [ ]; then"
+alias ENDCOMMENT="fi"
 
 
 # Installation Elastic
@@ -58,7 +61,6 @@ esac
 
 # v: rename /Users/zouheir/elastic/search/elasticsearch-7.1.1-darwin-x86_64 to /Users/zouheir/elastic/search/7.1.1: No such file or directory
 
-exit
 
 # Installation Kibana
 case $OS in
