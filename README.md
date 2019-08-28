@@ -63,16 +63,15 @@ GET /tp_elastic_gstore/_analyze
 
 ###### Modifier le mapping pour que la recherche donne un résultat avec le token diabete ? 
 ```shell
-DELETE hol_devoxxfr_gstore_*
+DELETE tp_elastic_gstore_*
 ```
 
+Créer l'index
 ```json
 PUT tp_elastic_gstore_v2
 {
   "mappings": 
   {
-      "doc" : 
-      {
         "properties" : 
         {
           "app_name" : 
@@ -100,8 +99,18 @@ PUT tp_elastic_gstore_v2
             }
           }     
         }
-      }
   }
+}
+```
+
+Créer l'alias sur le nouvel index
+# Créer l'alias
+```json
+POST /_aliases
+{
+    "actions" : [
+        { "add" : { "index" : "tp_elastic_gstore_v2", "alias" : "tp_elastic_gstore" } }
+    ]
 }
 ```
 
@@ -117,14 +126,7 @@ GET /tp_elastic_gstore/_analyze
 
 
 ###### Charger les données
-```json
-POST /_aliases
-{
-    "actions" : [
-        { "add" : { "index" : "tp_elastic_gstore_v2", "alias" : "tp_elastic_gstore" } }
-    ]
-}
-```
+
 
 
 ###### Rechercher de nouveau le token diabete. La recherche devrait être fructueuse si vous avez choisi le mapping adequat
@@ -281,8 +283,6 @@ PUT tp_elastic_gstore_v3
   }, 
   "mappings": 
   {
-      "doc" : 
-      {
         "properties" : 
         {
           "app_name" : 
@@ -315,11 +315,11 @@ PUT tp_elastic_gstore_v3
             }
           }     
         }
-      }
   }
 }
 ```
 
+Créer alias
 ```json
 POST /_aliases
 {
@@ -338,6 +338,8 @@ GET /tp_elastic_gstore/_analyze
   "field": "app_name.whitespace"
 }
 ```
+
+###### Charger les données
 
 *  Une recherche du token messaging+ ne trouve que les documents contenant cette chaîne
 ```json
@@ -361,8 +363,7 @@ GET /tp_elastic_gstore/_search
   {
     "multi_match": {
       "query": "messaging+",
-      "fields": ["app_name","app_name.english","app_name.whitespace"],
-      "type": "most_fields"
+      "fields": ["app_name","app_name.english","app_name.whitespace"]
     }
   }
 }
@@ -427,8 +428,6 @@ PUT tp_elastic_gstore_v4
   }, 
   "mappings": 
   {
-      "doc" : 
-      {
         "properties" : 
         {
           "app_name" : 
@@ -479,11 +478,11 @@ PUT tp_elastic_gstore_v4
             "type" : "text"
           }          
         }
-      }
   }
 }
 ```
 
+Créer alias
 ```json
 POST /_aliases
 {
@@ -492,6 +491,8 @@ POST /_aliases
     ]
 }
 ```
+
+Charger les données
 
 ```json
 GET /tp_elastic_gstore/_search
@@ -564,8 +565,6 @@ PUT tp_elastic_gstore_v5
   }, 
   "mappings": 
   {
-      "doc" : 
-      {
         "properties" : 
         {
           "app_name" : 
@@ -634,11 +633,12 @@ PUT tp_elastic_gstore_v5
             "type" : "text"
           }          
         }
-      }
   }
 }
 ```
 
+
+Créer alias
 ```json
 POST /_aliases
 {
@@ -648,6 +648,7 @@ POST /_aliases
 }
 ```
 
+Tester l'index avant chargement des données
 ```json
 GET /tp_elastic_gstore/_analyze
 {
@@ -657,14 +658,15 @@ GET /tp_elastic_gstore/_analyze
 ```
 
 
+Charger les données
+
 ```json
 GET /tp_elastic_gstore/_search
 {
   "query": 
   {
-    "multi_match": {
-      "query": "D",
-      "fields": ["category.autocomplete","app_name.autocomplete","genres.autocomplete"]
+    "match": {
+      "app_name.autocomplete": "D"
     }
   }
 }
