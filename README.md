@@ -660,6 +660,7 @@ GET /tp_elastic_gstore/_analyze
 
 Charger les données
 
+Exécuter une requête de test
 ```json
 GET /tp_elastic_gstore/_search
 {
