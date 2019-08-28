@@ -1,5 +1,5 @@
 ## Contrôle de la pertinence
-### Autocréation d’index
+
 
 Le jeu d'essai est le même que pour l'exercice sur la géolocalisation
 
