@@ -5,7 +5,7 @@
 ###### Commande REST de type POST à exécuter pour charger le jeu d'essai 
 
 ```shell
-POST  tp_elastic_formations/_doc/_bulk
+POST  tp_elastic_formations/_bulk
 { "index": { "_id":1}}
 {"course" : "Elasticsearch Engineer I", "start_date" : "2019-09-16", "end_date" : "2019-09-17", "city" : "Zurich", "country" : "Switzerland","location" : {"lat":"47.3769","lon":"8.5417"}}
 { "index": { "_id":2}}
@@ -46,6 +46,5 @@ POST  tp_elastic_formations/_doc/_bulk
 {"course" : "Elasticsearch Engineer I", "start_date" : "2019-07-01", "end_date" : "2019-07-02", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"}}
 { "index": { "_id":20}}
 {"course" : "Elasticsearch Engineer II", "start_date" : "2019-07-03", "end_date" : "2019-07-04", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"}}
-
 ```
 
