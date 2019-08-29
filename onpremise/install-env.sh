@@ -1,5 +1,5 @@
 VERSION=7.3.1
-ELASTIC_BIN=elasticsearch-${VERSION}.tar.gz
+ELASTIC_BIN=elasticsearch-${VERSION}-linux-x86_64.tar.g
 ELASTIC_MACOS_BIN=elasticsearch-${VERSION}-darwin-x86_64.tar.gz
 ELASTIC_MACOS_FOLDER=elasticsearch-${VERSION}-darwin-x86_64
 
