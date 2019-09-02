@@ -4,12 +4,11 @@
 Créer un index avec les caractéristiques suivantes
 * Nom : tp_elastic_14
 * Dont le mapping est
-    * Type : _doc
-        * Champs
-            * app_name : chaine de caractère analysée
-            * category : chaine de caractère non analysée
-            * last_updated : date
-            * rating : double
+    * Champs
+        * app_name : chaine de caractère analysée
+        * category : chaine de caractère non analysée
+        * last_updated : date
+        * rating : double
 
 ```json
 PUT /tp_elastic_14
