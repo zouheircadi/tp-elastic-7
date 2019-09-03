@@ -126,7 +126,6 @@ PUT tp_elastic_formations
 ```
 
 
-######4- 
 Exécuter de nouveau la [requête précédente](#2-RequeteGeo)
 
 
