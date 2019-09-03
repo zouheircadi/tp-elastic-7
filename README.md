@@ -69,7 +69,7 @@ PUT tp_elastic_lang1
 
 Création du mapping
 ```shell
-PUT tp_elastic_lang1/_mapping/_doc
+PUT tp_elastic_lang1/_mapping/
 {
   "properties" : 
   {
@@ -135,7 +135,7 @@ PUT tp_elastic_lang1/_mapping/_doc
 
 #### Ajout des données
 ```shell
-POST /tp_elastic_lang1/_doc/_bulk
+POST /tp_elastic_lang1/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor & Candy Camera & Grid & ScrapBook", "type" : "Free", "genres" : "Art & Design", "category" : "ART_AND_DESIGN","price" : 0.0, "last_updated" : "2018-01-06T23:00:00.000Z", "content_rating" : "Everyone","rating" : 4.1}
 { "index": { "_id": 2 }}
