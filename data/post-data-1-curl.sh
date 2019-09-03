@@ -5,8 +5,6 @@ curl -XPUT "http://localhost:9200/tp_elastic_pm1" -H 'Content-Type: application/
 {
   "mappings": 
   {
-    "_doc" :
-    {
       "properties" : 
       {
         "code" : 
@@ -18,11 +16,10 @@ curl -XPUT "http://localhost:9200/tp_elastic_pm1" -H 'Content-Type: application/
           "type" : "keyword"
         }
       }
-    }
   }
 }'
 
-curl -XPOST "http://localhost:9200/tp_elastic_pm1/_doc/_bulk" -H 'Content-Type: application/json' -d'
+curl -XPOST "http://localhost:9200/tp_elastic_pm1/_bulk" -H 'Content-Type: application/json' -d'
 { "index": {  }}
 {"code":"AFG","country":"Afghanistan"}
 { "index": {  }}

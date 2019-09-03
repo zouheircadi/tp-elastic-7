@@ -4,8 +4,6 @@ PUT /tp_elastic_pm1
 {
   "mappings": 
   {
-    "_doc" :
-    {
       "properties" : 
       {
         "code" : 
@@ -17,11 +15,10 @@ PUT /tp_elastic_pm1
           "type" : "keyword"
         }
       }
-    }
   }
 }
 
-POST /tp_elastic_pm1/_doc/_bulk
+POST /tp_elastic_pm1/_bulk
 { "index": {  }}
 {"code":"AFG","country":"Afghanistan"}
 { "index": {  }}
