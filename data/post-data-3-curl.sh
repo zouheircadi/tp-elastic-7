@@ -1,4 +1,4 @@
-curl -XPOST "http://localhost:9200/tp_elastic_pm3/_doc/_bulk" -H 'Content-Type: application/json' -d'
+curl -XPOST "http://localhost:9200/tp_elastic_pm3/_bulk" -H 'Content-Type: application/json' -d'
 { "index": {  }}
 {"code":"AFG","country":"Afghanistan"}
 { "index": {  }}
