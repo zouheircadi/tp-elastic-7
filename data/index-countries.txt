@@ -1,0 +1,19 @@
+
+
+# Create index
+# CSV Header with units 
+# Code,Country,Region,Population,Area(sq.mi.),Pop.Density(persq.mi.),Coastline(coast/arearatio),Netmigration,Infantmortality(per1000births),GDP($percapita),Literacy(%),Phones(per1000),Arable(%),Crops(%),Other(%),Climate,Birthrate,Deathrate,Agriculture,Industry,Service,latitude,longitude
+PUT /tp_kib_countries
+{
+  "mappings": {
+    "properties": {
+          "location": { "type" : "geo_point" }
+    }
+  },
+  "settings": {
+    "index": {
+         "number_of_shards": "1",
+         "number_of_replicas": "0"
+    }
+  }  
+}
