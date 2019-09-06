@@ -126,7 +126,7 @@ PUT tp_elastic_formations
 ```
 
 
-Exécuter de nouveau la [requête précédente](#2-RequeteGeo)
+4- Exécuter de nouveau la [requête précédente](#2-RequeteGeo)
 
 
 ```
@@ -148,6 +148,41 @@ GET tp_elastic_formations/_search
               "origin": "50.633307,3.020001",
               "scale": "50km",
               "offset": "240km",
+              "decay": 0.5
+            }
+          },
+          "weight": 1
+        }
+      ]
+    }
+  }
+}
+```
+
+
+
+5- Decay function sur la géolocalisation 
+... Mettez en place une requête analogue et tester là en simulant une localisation à Lille.
+
+```json
+GET tp_elastic_formations/_search
+{
+  "query": 
+  {
+    "function_score": {
+      "query": 
+      {
+        "match": {
+          "course": "elasticsearch"
+        }
+      },
+      "functions": [
+        {
+          "gauss": {
+            "location": {
+              "origin": "50.633307,3.020001",
+              "scale": "50km",
+              "offset": "200km",
               "decay": 0.5
             }
           },
