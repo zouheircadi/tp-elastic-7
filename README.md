@@ -31,6 +31,10 @@ POST  tp_elastic_formations/_bulk
 
 
 ###### 2- 
+La fonction adéquate est une decay function. L'astuce est de prendre 
+* une origine à zéro 
+* un offset égal à la borne à partir de laquelle le prix commence à baisser, dans notre cas 2000 €
+* Pas de contraintes particulières sur le scale et le decay. Ce sont des variables qui doivent faire l'objet de tests en collaboration avec le métier. 
 
 ###### sans sort
 ```
