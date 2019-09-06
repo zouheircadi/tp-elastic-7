@@ -1,7 +1,9 @@
-## corpus google score - controle du score
+##Contrôle de la pertinence
+### Contrôle du score par un ranking utilisateur (like, rating, …)
 
 
-# Function score sur le rating
+
+# Function score sur le rating avec un field value factor
 
 1- 
 ```shell
