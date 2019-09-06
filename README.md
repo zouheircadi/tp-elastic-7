@@ -43,7 +43,7 @@ GET tp_elastic_fct_decay/_search
       "query": 
       {
         "match": {
-          "course": "Elasticsearch"
+          "course": "elasticsearch"
         }
       },
       "functions": [
