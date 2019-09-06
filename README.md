@@ -157,8 +157,7 @@ GET tp_elastic_formations/_search
               "offset": "200km",
               "decay": 0.5
             }
-          },
-          "weight": 1
+          }
         }
       ]
     }
