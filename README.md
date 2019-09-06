@@ -2,7 +2,7 @@
 ### Jeu d'essai
 
 
-###### 1- Commande REST de type POST à exécuter pour charger le jeu d'essai 
+###### 1-CommandeREST 
 
 ```shell
 POST  tp_elastic_formations/_bulk
@@ -91,12 +91,14 @@ Si on isole la partie spécifique au type location, on constate qu'il est créé
 
 Le type geo-point ne peut pas être inféré. Il faut le créer explicitement. 
 
-Supprimer l'index
+###### 4- 
+On doit donc
+* supprimer l'index
 ```
 DELETE tp_elastic_formations
 ```
 
-Créer l'index avec le mapping adequat de type geopoint
+* Créer l'index avec le mapping adequat de type geopoint
 ```
 PUT tp_elastic_formations
 {
@@ -126,43 +128,16 @@ PUT tp_elastic_formations
 ```
 
 
-4- Exécuter de nouveau la [requête précédente](#2-RequeteGeo)
+* Charger [les données](#2-RequeteGeo)
 
-
-```
-GET tp_elastic_formations/_search
-{
-  "query": 
-  {
-    "function_score": {
-      "query": 
-      {
-        "match": {
-          "course": "elasticsearch"
-        }
-      },
-      "functions": [
-        {
-          "gauss": {
-            "location": {
-              "origin": "50.633307,3.020001",
-              "scale": "50km",
-              "offset": "240km",
-              "decay": 0.5
-            }
-          },
-          "weight": 1
-        }
-      ]
-    }
-  }
-}
-```
+* Exécuter de nouveau la [requête de chargement des données](#1-CommandeREST)
 
 
 
-5- Decay function sur la géolocalisation 
-... Mettez en place une requête analogue et tester là en simulant une localisation à Lille.
+###### 5-  
+Il s'agit bien entendu d'une decay_function
+* l'offset vous a été donné
+* le scale et le decay sont à préciser avec le métier
 
 ```json
 GET tp_elastic_formations/_search
