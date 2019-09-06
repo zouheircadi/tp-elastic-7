@@ -2,7 +2,7 @@
 ### Jeu d'essai
 
 
-###### Commande REST de type POST à exécuter pour charger le jeu d'essai 
+###### 1- Commande REST de type POST à exécuter pour charger le jeu d'essai 
 
 ```shell
 POST  tp_elastic_formations/_bulk
@@ -28,3 +28,83 @@ POST  tp_elastic_formations/_bulk
 {"course" : "Elasticsearch Engineer I", "start_date" : "2019-07-01", "end_date" : "2019-07-02", "city" : "Dublin", "country" : "Ireland","location" : {"lat":"53.33306","lon":"-6.24889"},"price" : 5000}
 ```
 
+
+
+###### 2- 
+
+###### sans sort
+```
+GET tp_elastic_fct_decay/_search
+{
+  "size": 20, 
+  "query": 
+  {
+    "function_score": {
+      "query": 
+      {
+        "match": {
+          "course": "Elasticsearch"
+        }
+      },
+      "functions": [
+        {
+          "linear": {
+            "price": {
+              "origin": "0",
+              "offset": "2000",
+              "scale": "200",
+              "decay": 0.8
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+
+
+
+###### avec sort sur le score puis sur le prix
+```
+# Avec sort
+GET tp_elastic_fct_decay/_search
+{
+  "size": 20, 
+  "sort": [
+    {
+      "_score": {
+        "order": "desc"
+      },
+      "price": 
+      {
+        "order": "asc"
+      }
+    }
+  ], 
+  "query": 
+  {
+    "function_score": {
+      "query": 
+      {
+        "match": {
+          "course": "elasticsearch"
+        }
+      },
+      "functions": [
+        {
+          "linear": {
+            "price": {
+              "origin": "0",
+              "offset": "2000",
+              "scale": "200",
+              "decay": 0.8
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
