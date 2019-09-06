@@ -1,5 +1,7 @@
-## Les données géographiques
-### Jeu d'essai
+## Le controle de la pertinence
+### Contrôle du score par un prix
+
+#### Jeu d'essai
 
 
 ###### Commande REST de type POST à exécuter pour charger le jeu d'essai 
