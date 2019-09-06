@@ -127,9 +127,6 @@ PUT tp_elastic_formations
 }
 ```
 
-
-* Charger [les données](#2-RequeteGeo)
-
 * Exécuter de nouveau la [requête de chargement des données](#1-CommandeREST)
 
 
