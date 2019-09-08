@@ -9,8 +9,10 @@ Renommer le en node-1
 
 Refaites l'opération pour chaque noeud à créer. Au final, vous devriez avoir l'arborescence suivante
 
-Général
+
 ![Arorescence - vue globale](./img/arbo-general.png)
 
-Détail
+
+![Arorescence - détail d'un noeud](./img/arbo-node.png)
+
 
