@@ -18,10 +18,10 @@ Refaites l'opération pour chaque noeud à créer. Au final, vous devriez avoir 
 ![Arorescence - détail d'un noeud](./img/arbo-node.png)
 
 
-* Node-1
+* Node-1  
 Ouvrir le fichier ./cluster-7.3.1/node-1/config/elasticsearch.yml 
 
-Ajouter les properties suivante
+Ajouter les properties suivantes
 ```properties
 discovery.seed_hosts: ["127.0.0.1:10300", "127.0.0.1:20300", "127.0.0.1:30300"]
 cluster.initial_master_nodes: ["node-1", "node-2", "node-3"]
@@ -38,10 +38,10 @@ cluster.remote.connect: false
 ```
 
 
-* Node-2
+* Node-2  
 Ouvrir le fichier ./cluster-7.3.1/node-2/config/elasticsearch.yml 
 
-Ajouter les properties suivante
+Ajouter les properties suivantes
 ```properties
 discovery.seed_hosts: ["127.0.0.1:10300", "127.0.0.1:20300", "127.0.0.1:30300"]
 cluster.initial_master_nodes: ["node-1", "node-2", "node-3"]
@@ -57,10 +57,10 @@ node.data: false
 cluster.remote.connect: false
 ```
 
-* Node-3
+* Node-3  
 Ouvrir le fichier ./cluster-7.3.1/node-3/config/elasticsearch.yml 
 
-Ajouter les properties suivante
+Ajouter les properties suivantes
 ```properties
 discovery.seed_hosts: ["127.0.0.1:10300", "127.0.0.1:20300", "127.0.0.1:30300"]
 cluster.initial_master_nodes: ["node-1", "node-2", "node-3"]
@@ -76,10 +76,10 @@ node.data: false
 cluster.remote.connect: false 
 ```
 
-* Node-4
+* Node-4  
 Ouvrir le fichier ./cluster-7.3.1/node-4/config/elasticsearch.yml 
 
-Ajouter les properties suivante
+Ajouter les properties suivantes
 ```properties
 discovery.seed_hosts: ["127.0.0.1:10300", "127.0.0.1:20300", "127.0.0.1:30300"]
 
@@ -94,11 +94,16 @@ node.master: false
 node.data: true 
 ```
 
-###### 2- 
+###### 2-
+* Exemple Linux 
+```shell
+ES_JAVA_OPTS="-Xms512m -Xmx512m" ./node-1/bin/elasticsearch
+```
+Puis refaire l'opération pour chaque noeud
 
 ###### 3-
 
 ###### 4-
 Vous avez monté un cluster contenant 3 master nodes et 1 data node. 
 * Il y a assez de master nodes
-* pour avoir une architecture tolérante aux pannes, on peut appliquer la règle 2*P + 1. Pour tolérer une panne, il faut donc 3 noeuds. Cette règle est valable pour les noeuds hébergeants des algoritmes distribués (Zookeeper, Système d'élection des masters dans Elasticsearch - master nodes dans notre cas, ...).
+* pour avoir une architecture tolérante aux pannes, on peut appliquer la règle 2*P + 1. Pour tolérer une panne, il faut donc 3 noeuds. Cette règle est valable pour les noeuds hébergeants des algoritmes distribués ([Zookeeper](http://zookeeper.apache.org/doc/r3.4.11/zookeeperAdmin.html), Système d'élection des masters dans Elasticsearch - master nodes dans notre cas, ...). Nous l'appliquons néanmoins aussi pour les data nodes.
