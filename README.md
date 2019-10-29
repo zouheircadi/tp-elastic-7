@@ -106,7 +106,7 @@ GET /tp_elastic_11/_analyze
 
 
 
-```shell
+```json
 GET /tp_elastic_11/_search
 {
     "query" : {
@@ -123,7 +123,7 @@ GET /tp_elastic_11/_search
 ```
 
 * Pour l'index tp_elastic_14, on peut interroger le champ category pour lequel on a fixé le mapping
-```shell
+```json
 GET /tp_elastic_14/_search
 {
     "query" : {
