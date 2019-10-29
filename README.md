@@ -82,7 +82,7 @@ GET tp_elastic_pm3/_search
   "query": 
   {
     "match": {
-      "country.autocomplete": "repu"
+      "country.autocomplete": "rep"
     }
   }
 }
