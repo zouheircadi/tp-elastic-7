@@ -270,7 +270,6 @@ Résultat de la requête avec un explain (seul le premier document retourné est
     ]
   }
 }
-
 ```
 
 #### AND
