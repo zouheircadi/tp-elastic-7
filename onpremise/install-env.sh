@@ -1,6 +1,5 @@
 VERSION=7.6.1
 ELASTIC_BIN=elasticsearch-${VERSION}-linux-x86_64.tar.gz
-ELASTIC_LINUX_FOLDER=elasticsearch-${VERSION}-linux-x86_64
 ELASTIC_MACOS_BIN=elasticsearch-${VERSION}-darwin-x86_64.tar.gz
 ELASTIC_MACOS_FOLDER=elasticsearch-${VERSION}-darwin-x86_64
 
@@ -41,7 +40,7 @@ case $OS in
         echo " url = https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_BIN}"
         wget https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_BIN}
         tar -xvf ${ELASTIC_BIN} -C $HOME/elastic/${VERSION}
-        mv $HOME/elastic/${VERSION}/${ELASTIC_LINUX_FOLDER} $HOME/elastic/${VERSION}/elasticsearch
+        mv $HOME/elastic/${VERSION}/elasticsearch-$VERSION $HOME/elastic/${VERSION}/elasticsearch
         mv $HOME/elastic/${VERSION}/${ELASTIC_BIN} $HOME/elastic/downloads/${ELASTIC_BIN}  
      fi
     ;;
