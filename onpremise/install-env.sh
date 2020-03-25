@@ -1,4 +1,4 @@
-VERSION=7.3.1
+VERSION=7.6.1
 ELASTIC_BIN=elasticsearch-${VERSION}-linux-x86_64.tar.gz
 ELASTIC_MACOS_BIN=elasticsearch-${VERSION}-darwin-x86_64.tar.gz
 ELASTIC_MACOS_FOLDER=elasticsearch-${VERSION}-darwin-x86_64
@@ -90,7 +90,7 @@ case $OS in
      else
        echo "${KIBANA_MACOS_BIN} not found - download it ..."
        wget https://artifacts.elastic.co/downloads/kibana/${KIBANA_MACOS_BIN}
-       tar -xvf ${KIBANA_MACOS_BIN} -C $HOME/elastic/kibana
+       tar -xvf ${KIBANA_MACOS_BIN} -C $HOME/elastic/${VERSION}
        mv $HOME/elastic/${VERSION}/${KIBANA_MACOS_FOLDER} $HOME/elastic/${VERSION}/kibana
        mv $HOME/elastic/${VERSION}/${KIBANA_MACOS_BIN} $HOME/elastic/downloads/${KIBANA_MACOS_BIN}     
      fi
