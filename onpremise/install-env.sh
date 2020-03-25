@@ -39,7 +39,7 @@ case $OS in
         echo "${ELASTIC_BIN} not found."
         echo " url = https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_BIN}"
         wget https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_BIN}
-        tar -xvf ${ELASTIC_BIN} -C HOME/elastic/${VERSION}
+        tar -xvf $HOME/elastic/downloads/${ELASTIC_BIN} -C HOME/elastic/${VERSION}
         mv $HOME/elastic/${VERSION}/elasticsearch-$VERSION $HOME/elastic/${VERSION}/elasticsearch
         mv $HOME/elastic/${VERSION}/${ELASTIC_BIN} $HOME/elastic/downloads/${ELASTIC_BIN}  
      fi
