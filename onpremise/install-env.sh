@@ -39,7 +39,7 @@ case $OS in
         echo "${ELASTIC_BIN} not found."
         echo " url = https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_BIN}"
         wget https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_BIN} -P $HOME/elastic/downloads
-        tar -xvf ${ELASTIC_BIN} -C $HOME/elastic/${VERSION}
+        tar -xvf $HOME/elastic/downloads/${ELASTIC_BIN} -C $HOME/elastic/${VERSION}
         mv $HOME/elastic/${VERSION}/elasticsearch-$VERSION $HOME/elastic/${VERSION}/elasticsearch
         # mv $HOME/elastic/${VERSION}/${ELASTIC_BIN} $HOME/elastic/downloads/${ELASTIC_BIN}  
      fi
@@ -76,7 +76,7 @@ case $OS in
      else
        echo "${KIBANA_LINUX_BIN} not found."
        wget https://artifacts.elastic.co/downloads/kibana/${KIBANA_LINUX_BIN} -P $HOME/elastic/downloads
-       tar -xvf ${KIBANA_LINUX_BIN} -C $HOME/elastic/${VERSION}
+       tar -xvf $HOME/elastic/downloads/${KIBANA_LINUX_BIN} -C $HOME/elastic/${VERSION}
        mv $HOME/elastic/${VERSION}/${KIBANA_LINUX_FOLDER} $HOME/elastic/${VERSION}/kibana
        #mv $HOME/elastic/${VERSION}/${KIBANA_LINUX_BIN} $HOME/elastic/downloads/${KIBANA_LINUX_BIN}     
      fi
@@ -90,7 +90,7 @@ case $OS in
      else
        echo "${KIBANA_MACOS_BIN} not found - download it ..."
        wget https://artifacts.elastic.co/downloads/kibana/${KIBANA_MACOS_BIN} -P $HOME/elastic/downloads
-       tar -xvf ${KIBANA_MACOS_BIN} -C $HOME/elastic/${VERSION}
+       tar -xvf $HOME/elastic/downloads/${KIBANA_MACOS_BIN} -C $HOME/elastic/${VERSION}
        mv $HOME/elastic/${VERSION}/${KIBANA_MACOS_FOLDER} $HOME/elastic/${VERSION}/kibana
        # mv $HOME/elastic/${VERSION}/${KIBANA_MACOS_BIN} $HOME/elastic/downloads/${KIBANA_MACOS_BIN}     
      fi
@@ -109,7 +109,7 @@ then
 else
   echo "${LOGSTASH_BIN} not found - download it ..."
   wget https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_BIN} -P $HOME/elastic/downloads
-  tar -xvf ${LOGSTASH_BIN} -C $HOME/elastic/${VERSION}
+  tar -xvf $HOME/elastic/downloads/${LOGSTASH_BIN} -C $HOME/elastic/${VERSION}
   mv $HOME/elastic/${VERSION}/logstash-$VERSION $HOME/elastic/${VERSION}/logstash
   # mv $HOME/elastic/${VERSION}/${LOGSTASH_BIN} $HOME/elastic/downloads/${LOGSTASH_BIN}
 fi
