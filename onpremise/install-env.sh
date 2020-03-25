@@ -1,91 +1,102 @@
-VERSION=7.6.1
+VERSION=7.3.1
+
 ELASTIC_BIN=elasticsearch-${VERSION}-linux-x86_64.tar.gz
+ELASTIC_FOLDER=elasticsearch-${VERSION}
+
 ELASTIC_MACOS_BIN=elasticsearch-${VERSION}-darwin-x86_64.tar.gz
 ELASTIC_MACOS_FOLDER=elasticsearch-${VERSION}-darwin-x86_64
-
-
-KIBANA_MACOS_BIN=kibana-${VERSION}-darwin-x86_64.tar.gz
-KIBANA_MACOS_FOLDER=kibana-${VERSION}-darwin-x86_64
 
 KIBANA_LINUX_BIN=kibana-${VERSION}-linux-x86_64.tar.gz
 KIBANA_LINUX_FOLDER=kibana-${VERSION}-linux-x86_64
 
+KIBANA_MACOS_BIN=kibana-${VERSION}-darwin-x86_64.tar.gz
+KIBANA_MACOS_FOLDER=kibana-${VERSION}-darwin-x86_64
+
 LOGSTASH_BIN=logstash-${VERSION}.tar.gz
+LOGSTASH_FOLDER=logstash-${VERSION}
+
+
+# Installation folder
+INSTAL_FOLDER=$HOME/elastic/${VERSION}
+
+# download folder
+DOWNLOAD_FOLDER=$HOME/elastic/downloads
+
+# Elastic download root url
+ES_ROOT_URL=https://artifacts.elastic.co/downloads
+
 
 export ELK_HOME=$HOME/elastic
 
-mkdir -p $HOME/elastic/downloads
-mkdir -p $HOME/elastic/${VERSION}
-cd $HOME/elastic/${VERSION}
+mkdir -p ${DOWNLOAD_FOLDER}
+mkdir -p ${INSTAL_FOLDER}
+cd ${INSTAL_FOLDER}
 
 
 
 OS="`uname`"
 
-alias BEGINCOMMENT="if [ ]; then"
-alias ENDCOMMENT="fi"
 
 
-# Installation Elastic
+# Elasticsearch installation
+## Linux and MacOS
 case $OS in
   'Linux')
-     # binaire already downloaded
-     if [ ! -f "$HOME/elastic/downloads/${ELASTIC_BIN}" ]
+     if [ ! -f "${DOWNLOAD_FOLDER}/${ELASTIC_BIN}" ]
      then
-        echo "${ELASTIC_BIN} no found."
-        wget https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_BIN} -P $HOME/elastic/downloads
+        echo "${ELASTIC_BIN} NOT found."
+        wget ${ES_ROOT_URL}/elasticsearch/${ELASTIC_BIN} -P ${DOWNLOAD_FOLDER}
      fi
-     tar -xvf $HOME/elastic/downloads/${ELASTIC_BIN} -C $HOME/elastic/${VERSION}
-     mv $HOME/elastic/${VERSION}/elasticsearch-$VERSION $HOME/elastic/${VERSION}/elasticsearch
-    # mv $HOME/elastic/${VERSION}/${ELASTIC_BIN} $HOME/elastic/downloads/${ELASTIC_BIN}  
+     tar -xvf ${DOWNLOAD_FOLDER}/${ELASTIC_BIN} -C ${INSTAL_FOLDER}
+     mv ${INSTAL_FOLDER}/${ELASTIC_FOLDER} ${INSTAL_FOLDER}/elasticsearch
 
     ;;
   'Darwin')
-     if [ ! -f "$HOME/elastic/downloads/${ELASTIC_MACOS_BIN}" ]
+     if [ ! -f "${DOWNLOAD_FOLDER}/${ELASTIC_MACOS_BIN}" ]
      then
        echo "${ELASTIC_MACOS_BIN} NOT found"
-       wget https://artifacts.elastic.co/downloads/elasticsearch/${ELASTIC_MACOS_BIN} -P $HOME/elastic/downloads
+       wget ${ES_ROOT_URL}/elasticsearch/${ELASTIC_MACOS_BIN} -P ${DOWNLOAD_FOLDER}
      fi
-     tar -xvf ${ELASTIC_MACOS_BIN} -C $HOME/elastic/${VERSION}
-     mv $HOME/elastic/${VERSION}/elasticsearch-$VERSION $HOME/elastic/${VERSION}/elasticsearch
+     tar -xvf ${DOWNLOAD_FOLDER}/${ELASTIC_MACOS_BIN} -C ${INSTAL_FOLDER}
+     mv ${INSTAL_FOLDER}/elasticsearch-${VERSION} ${INSTAL_FOLDER}/elasticsearch
     ;;
   *) ;;
 esac
 
 
-# v: rename /Users/zouheir/elastic/search/elasticsearch-7.1.1-darwin-x86_64 to /Users/zouheir/elastic/search/7.1.1: No such file or directory
 
-
-# Installation Kibana
+# Kibana installation
+# Linux and MacOS
 case $OS in
   'Linux')
-     if [ ! -f "$HOME/elastic/downloads/${KIBANA_LINUX_BIN}" ]
+     if [ ! -f "${DOWNLOAD_FOLDER}/${KIBANA_LINUX_BIN}" ]
      then
        echo "${KIBANA_LINUX_BIN} NOT found."
-       wget https://artifacts.elastic.co/downloads/kibana/${KIBANA_LINUX_BIN} -P $HOME/elastic/downloads
+       wget ${ES_ROOT_URL}/kibana/${KIBANA_LINUX_BIN} -P ${DOWNLOAD_FOLDER}
      fi
-     tar -xvf $HOME/elastic/downloads/${KIBANA_LINUX_BIN} -C $HOME/elastic/${VERSION}
-     mv $HOME/elastic/${VERSION}/${KIBANA_LINUX_FOLDER} $HOME/elastic/${VERSION}/kibana
+     tar -xvf ${DOWNLOAD_FOLDER}/${KIBANA_LINUX_BIN} -C ${INSTAL_FOLDER}
+     mv ${INSTAL_FOLDER}/${KIBANA_LINUX_FOLDER} ${INSTAL_FOLDER}/kibana
     ;;
   'Darwin')
-     if [ ! -f "$HOME/elastic/downloads/${KIBANA_MACOS_BIN}" ]
+     if [ ! -f "${DOWNLOAD_FOLDER}/${KIBANA_MACOS_BIN}" ]
      then
        echo "${KIBANA_MACOS_BIN} NOT found"
-       wget https://artifacts.elastic.co/downloads/kibana/${KIBANA_MACOS_BIN} -P $HOME/elastic/downloads
+       wget ${ES_ROOT_URL}/kibana/${KIBANA_MACOS_BIN} -P ${DOWNLOAD_FOLDER}
      fi
-     tar -xvf $HOME/elastic/downloads/${KIBANA_MACOS_BIN} -C $HOME/elastic/${VERSION}
-     mv $HOME/elastic/${VERSION}/${KIBANA_MACOS_FOLDER} $HOME/elastic/${VERSION}/kibana
+     tar -xvf ${DOWNLOAD_FOLDER}/${KIBANA_MACOS_BIN} -C ${INSTAL_FOLDER}
+     mv ${INSTAL_FOLDER}/${KIBANA_MACOS_FOLDER} ${INSTAL_FOLDER}/kibana
     ;;
   *) ;;
 esac
 
 
 
-# Installation logstash
-if [ ! -f "$HOME/elastic/downloads/${LOGSTASH_BIN}" ]
+# Logstash installation
+# Linux and MacOS
+if [ ! -f "${DOWNLOAD_FOLDER}/${LOGSTASH_BIN}" ]
 then
   echo "${LOGSTASH_BIN} NOT found"
-  wget https://artifacts.elastic.co/downloads/logstash/${LOGSTASH_BIN} -P $HOME/elastic/downloads
+  wget ${ES_ROOT_URL}/logstash/${LOGSTASH_BIN} -P ${DOWNLOAD_FOLDER}
 fi
-tar -xvf $HOME/elastic/downloads/${LOGSTASH_BIN} -C $HOME/elastic/${VERSION}
-mv $HOME/elastic/${VERSION}/logstash-$VERSION $HOME/elastic/${VERSION}/logstash
+tar -xvf ${DOWNLOAD_FOLDER}/${LOGSTASH_BIN} -C ${INSTAL_FOLDER}
+mv ${INSTAL_FOLDER}/${LOGSTASH_FOLDER} ${INSTAL_FOLDER}/logstash
