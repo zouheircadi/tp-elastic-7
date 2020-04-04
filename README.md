@@ -523,10 +523,13 @@ GET /tp_elastic_gstore/_search
 ```
 
 ###### searchAsYouType
+
+* Supprimer les index existants
 ```shell
 DELETE tp_elastic_gstore_*
 ```
 
+* Créer l'index de travail tp_elastic_gstore_v5
 ```json
 PUT tp_elastic_gstore_v5
 {
@@ -638,7 +641,8 @@ PUT tp_elastic_gstore_v5
 ```
 
 
-Créer alias
+* Créer alias
+    * L'alias tp_elastic_gstore va pointer sur l'index tp_elastic_gstore_v5 
 ```json
 POST /_aliases
 {
@@ -648,7 +652,7 @@ POST /_aliases
 }
 ```
 
-Tester l'index avant chargement des données
+* Tester l'index avant chargement des données
 ```json
 GET /tp_elastic_gstore/_analyze
 {
@@ -658,9 +662,18 @@ GET /tp_elastic_gstore/_analyze
 ```
 
 
-Charger les données
+* Charger les données
+    * Linux
+```shell
+$LOGSTATSH_INSTALL_DIR/bin/logstash -f <$PATH_TO>/ls-google-playstore.conf
+```
+*   
+    * Windows
+```shell
+%LOGSTATSH_INSTALL_DIR%\bin\ logstash -f C:\elastic\tp-elastic\data\ls-google-playstore.conf 
+```
 
-Exécuter une requête de test
+* Exécuter une requête de test
 ```json
 GET /tp_elastic_gstore/_search
 {
