@@ -2,7 +2,7 @@
 ### Recherches basiques de type filtre - 2 (chargement des données)
 
 
-###### Données à charger avec les devTools Kibana
+###### Chargement des données de test avec les devTools Kibana
 ```shell
 POST tp_elastic_filter/_bulk
 { "index": { "_id": 1 }}
@@ -38,7 +38,7 @@ POST tp_elastic_filter/_bulk
 ```    
 
 
-###### Chargement avec une requête Curl
+###### Chargement des données de test avec une commande Curl en shell
 ```shell
 curl -XPOST "http://localhost:9200/tp_elastic_filter/_bulk" -H 'Content-Type: application/json' -d'
 { "index": { "_id": 1 }}
