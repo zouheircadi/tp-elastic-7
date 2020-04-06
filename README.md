@@ -131,6 +131,8 @@ GET /tp_elastic_pm1/_search
 ``` 
 
 ###### Si vous avez chargé le jeu d’essais avec les scripts qui vous ont été procurés, la recherche devrait être infructueuse. Pourquoi ?
+
+Un validate de la query permet d'avoir une indication
 ```shell
 GET /tp_elastic_pm1/_validate/query?explain
 {
@@ -143,7 +145,9 @@ GET /tp_elastic_pm1/_validate/query?explain
 }
 ```
 
-La chaine cong devrait être jokérisée. Ca n'est pas le cas. Pensez aussi au fait que les champs sont de type keyword
+Dans la réponse à cette requête de debug, il est indiqué que ce type de requête ne s'applique qu'aux champs de type text. Or, les champs de l'index sont de type keyword.  
+ 
+
 
 ###### Créer un autre index tp_elastic_pm2 avec le bon mapping et recharger les données. 
 
@@ -164,7 +168,7 @@ GET /tp_elastic_pm2/_validate/query?explain
   }
 }
 ```
-* explain sur le champ donne maintenant un résultat jokérisé
+* L'explain sur le champ donne maintenant un résultat jokérisé
 
 
 ###### Refaites la requête sur l’index tp_elastic_pm2
