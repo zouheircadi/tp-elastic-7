@@ -50,13 +50,22 @@ GET /tp_elastic_mf2/_search
 }
 ```
 
+* score dans l'ordre remonté par la requête
+
+|Document ID|      Score  |
+|:---------:|:-----------:|
+|     2     |  0.9223515  |
+|     1     |  0.7268042  |
 
 
-Les tokens draw et art sont présents
-* Pour le document d’identifiant 1, simultanément dans le champs app_name. Ce document peut donc être considéré comme très pertinent en prenant comme hypothèse que l’association et la proximité des mots est importante
-* Pour le document d’identifiant 2, art est présent dans le champ genres et draw est présent dans le champ app_name. Le mode de calcul de la pertinence lui attribue  ainsi un score plus élevé.
 
-On peut ne pas se satisfaire de ce mode de calcul. Comment faire pour que les champs qui contiennent le plus de mots recherchés remontent mieux ? La réponse est dans l’exercice suivant.
+Les tokens draw et art sont présents :
+* Pour le document d’identifiant 1, tous les deux dans le champ app_name. Ce document peut donc être considéré comme très pertinent en prenant pour hypothèse que l’association et la proximité des mots est importante
+* Pour le document d’identifiant 2, art est présent dans le champ genres et draw est présent dans le champ app_name. Le mode de calcul de la pertinence lui attribue ainsi un score plus élevé que le document d'identifiant 1.
+
+Le mode de calcul de la pertinence, tel qu'il est mis en oeuvre dans ce cas présente des effets de bord. On peut ne pas s'en satisfaire. 
+
+Comment faire pour que les champs qui contiennent le plus de mots recherchés remontent mieux ? La réponse est dans l’exercice suivant.
 
 
 ##### Recherches de type Dismax
@@ -106,10 +115,19 @@ GET /tp_elastic_mf3/_search
 }
 ```
 
-Le document 2 contient le terme entertainment dans le champ genres et le terme art dans le champ app_name. Il est donc plus pertinent que le document 1 qui ne contient que le terme art dans le champ genres. Or, comme la requête est de type Dismax, seul le score du champ qui matche le mieux est remonté pour un document donné ; le score des autres champs qui matchent n’est pas pris en compte. L’effet cumulatif sur le score en cas de présence simultanée dans plusieurs champs est donc perdu.
+* score dans l'ordre remonté par la requête
 
-La solution pour tenir compte de tous les champs qui matchent est expliquée dans l’exercice suivant
+|Document ID|     Score   |
+|:---------:|:-----------:|
+|     1     |  0.6931472  |
+|     2     |  0.6931472  |
 
+
+Le document 2 contient le terme entertainment dans le champ genres et le terme art dans le champ app_name. 
+Il est donc plus pertinent que le document 1 qui ne contient que le terme art dans le champ genres. 
+Or, comme la requête est de type Dismax, seul le score du champ qui matche le mieux est remonté pour un document donné ; le score des autres champs qui matchent n’est pas pris en compte. L’effet cumulatif sur le score en cas de présence simultanée dans plusieurs champs est donc perdu.
+
+La solution pour tenir compte de tous les champs qui matchent est expliquée dans l’exercice suivant.
 
 
 ##### Recherches de type Dismax  avec tiebreaker
@@ -177,12 +195,13 @@ Le score se décompose comme suit :
 * 0.88960975 = 
     * 0,6931472 => le tie_breaker ne s'applique pas au champ dont le score est le plus élevé
     *    (+) 
-    * (tie_breaker * 0,6548752)  => prise en compte du champ de score plus bas modéré par le tie_breaker
+    * (tie_breaker * 0,6548752)  => prise en compte du champ de score plus bas multiplié par le tie_breaker
 
-Modulation de l'effet tie_breaker 
+Modulations possibles de l'effet tie_breaker : 
 * tie_breaker = 0 : le score du document remonté sera celui du champ dont le score est le plus élevé
 * tie_breaker = 1 : Suppression de l'effet Dismax 
 * tie_breaker usuel 0.3 à 0.4
+
 
 ##### Queries de type Multimatch
 
@@ -222,7 +241,7 @@ GET /tp_elastic_mf3/_search
 }
 ```
 
-La pondération est appelée boost est peut être  
+La pondération est appelée boost est peut être :
 * égale à un entier naturel positif. Dans ce cas, elle augmentera le score
 * comprise entre 0 et 1. Dans ce cas, elle réduira le score
 
