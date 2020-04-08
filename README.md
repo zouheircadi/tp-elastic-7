@@ -171,8 +171,8 @@ POST /tp_elastic_lang1/_bulk
 
 #### Requêtes
 
-
-* Approche naïve
+* Faites une requête de type multimatch bestfields uniquement sur le champ app_name pour
+rechercher la chaîne photos (Approche naïve).
 ```shell
 GET tp_elastic_lang1/_search
 {
@@ -186,8 +186,13 @@ GET tp_elastic_lang1/_search
 }
 ```
 
+* Que constatez vous ?
+    * La requête ne retourne rien car elle n'adresse pas le bon champ
 
-* Je connais mon mapping et je sais ajouter des champs imbriqués dans la requête multifields pour tenir compte de la langue du texte pour augmenter le recall
+
+* Qu’est-il possible de faire pour augmenter le recall de cette requête ?
+
+    * Je connais mon mapping et je sais ajouter des champs imbriqués dans la requête multifields pour tenir compte de la langue du texte pour augmenter le recall
 ```shell
 GET tp_elastic_lang1/_search
 {
@@ -202,15 +207,11 @@ GET tp_elastic_lang1/_search
 ```
 
 
-* Je joue sur la pondération. Dans ce cas d'utilisation, si on considère qu'on veut retourner aux utilisateurs en priorité les documents qui contiennent les chaïnes de caractère les plus proches de leurs saisies, on peut 
-    * augmenter la pondération du champ app_name qui utilise le standard analyzer (tokens stockés sans modification).
-    * ajouter dans les champs recherchés le champ qui fait l'objet d'une analyse spécifique à la langue sans nécessairement toucher à la pondération   
+* 
+    * Je joue sur la pondération. Dans ce cas d'utilisation, si on considère qu'on veut retourner aux utilisateurs en priorité les documents qui contiennent les chaïnes de caractère les plus proches de leurs saisies, on peut 
+        * augmenter la pondération du champ app_name qui utilise le standard analyzer (tokens stockés sans modification).
+        * ajouter dans les champs recherchés le champ qui fait l'objet d'une analyse spécifique à la langue sans nécessairement toucher à la pondération   
 
-On constate ainsi que l'augmentation de la pondération du champ app_name ne change pas le score car le terme photos n'est pas trouvé. C'est le terme photo qui est trouvé dans le champ app_name.english. Cette démarche permet d'augmenter simultanément 
-* la précision : augmentation du score des résultats pertinents qui apparaitront ainsi en premier dans la recherche
-* le recall : recherche dans un ou des champs avec des indexations qui reduisent l'inflexion et augmentent ainsi la probabilité de trouver des termes proches
-
-Pour conclure, il faut bien garder à l'esprit que la query de type pierre philosphale n'existe pas. Une requête et le tuning correspondant ne sont que l'expression d'un cas d'utilisation. 
 
 ```shell
 GET tp_elastic_lang1/_search
@@ -224,3 +225,12 @@ GET tp_elastic_lang1/_search
   }
 }
 ```
+
+
+On constate ainsi que l'augmentation de la pondération du champ app_name ne change pas le score car le terme photos n'est pas trouvé. C'est le terme photo qui est trouvé dans le champ app_name.english. Cette démarche permet d'augmenter simultanément 
+* la précision : augmentation du score des résultats pertinents qui apparaitront ainsi en premier dans la recherche
+* le recall : recherche dans un ou des champs avec des indexations qui reduisent l'inflexion et augmentent ainsi la probabilité de trouver des termes proches
+
+Pour conclure, il faut bien garder à l'esprit que la query de type pierre philosphale n'existe pas. Une requête et le tuning correspondant ne sont que l'expression d'un cas d'utilisation. 
+
+
