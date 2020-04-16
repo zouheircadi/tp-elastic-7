@@ -2,15 +2,31 @@
 ### Suppression index
 
 
-###### Supprimer l’index tp_elastic_152
+###### Suivi de production - chargement d'un index problématique
+
+* Supprimer les replicas ce qui permet de n'ecrire que sur les shards primaires. Plus il y a de réplicas, plus les ecritures seront lentes  
+* et passer le refresh_interval à -1 ce qui désactive le refresh
 ```shell
-DELETE /tp_elastic_152
+PUT /tp_elastic_17/_settings
+{
+  "index": 
+    {
+      "refresh_interval": "-1",
+      "number_of_replicas" : 0
+    
+  }
+}
 ```    
 
-###### Vérifier qu’il l’a bien été en testant son existence 
-Une requête REST HEAD sur l'alias doit envoyer un code 
-* 404 quand l'alias n'existe pas
-* 200 si l'alias existe
+* A l'issue du chargement, revenir aux conditions de production 
 ```shell
-HEAD /tp_elastic_152
+PUT /tp_elastic_17/_settings
+{
+  "index": 
+    {
+      "refresh_interval": "30s",
+      "number_of_replicas" : 2
+    
+  }
+}
 ```
