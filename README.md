@@ -1,687 +1,299 @@
-# Cas d’utilisation Google Play Store
-## Recherches
+
+# Cluster - capacity planning
+
+## Taille de stockage de N documents ?
+
+### Index avec un mapping par défaut
 
 
-###### music dans le champ app_name
+#### Create template
 ```json
-GET /tp_elastic_gstore/_search
+PUT /_template/template_capacity_planning
 {
-  "query": 
+  "index_patterns" : ["tp_elastic_gstore_cp*"],
+  "settings": 
   {
-    "match": {
-      "app_name": "music"
-    }
+    "number_of_shards": 1,
+    "number_of_replicas": 0
   }
 }
 ```
 
-###### diabete dans le champ app_name
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "match": {
-      "app_name": "diabete"
-    }
-  }
-}
+#### Delete all index
+```
+DELETE tp_elastic_gstore_c*
 ```
 
-
-###### La recherche sur diabete ne donne rien. Pourquoi ?
-Utilisation de l'analyzer par défaut qui ne fait pas de stemmisation
-
-###### Refaites la recherche avec le token diabetes
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "match": {
-      "app_name": "diabetes"
-    }
-  }
-}
+#### Load Data
+```shell script
+./bin/logstash   -f ./<$PATH_TO>/ls-google-playstore.conf
 ```
 
-###### Comment modifier le mapping pour que la recherche donne un résultat avec le token diabete ?
-###### 
-* Il faut utiliser un analyzer personnalisé ou présent sur étagère pour réduire les mots à leur racine. On peut dans un premier temps tester l'effet d'un analyzer english par exemple car le texte indexé est dans la langue anglaise
-*  Dans l'analyse indiquée ci-dessous, on constate que les tokens diabetes et diabete sont réduits à la racine diabete. L'analyzer english présent sur étagère est donc suffisant pour répondre à ce problème
-
-###### Comment pouvez vous faire des tests d’une solution probable ?
-* Endpoint _analyze avec un un analyzer présent sur étagère
-```json
-GET /tp_elastic_gstore/_analyze
-{
-  "text": ["diabetes","diabete"],
-  "analyzer": "english"
-}
+#### Mapping control
 ```
-
-
-###### Modifier le mapping pour que la recherche donne un résultat avec le token diabete ? 
-```shell
-DELETE tp_elastic_gstore_*
+GET tp_elastic_gstore_cp
 ```
+* Le mapping est inféré. Il est représenté ci-dessous (partie mappings). Tous les champs de type text ont un double mapping text et keyword limité à 256 caractères
 
-Créer l'index
 ```json
-PUT tp_elastic_gstore_v2
 {
-  "mappings": 
-  {
-        "properties" : 
-        {
-          "app_name" : 
-          {
-            "type" : "text",
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              }
-            }
-          },
-          "genres" : 
-          {
-            "type" : "text",
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              }              
-            }
-          }     
-        }
-  }
-}
-```
-
-Créer l'alias sur le nouvel index
-# Créer l'alias
-```json
-POST /_aliases
-{
-    "actions" : [
-        { "add" : { "index" : "tp_elastic_gstore_v2", "alias" : "tp_elastic_gstore" } }
-    ]
-}
-```
-
-
-###### Tester la solution choisie avec le endpoint _analyze avant de la mettre en oeuvre (avant le chargement des données).
-```json
-GET /tp_elastic_gstore/_analyze
-{
-  "text": ["diabetes","diabete"],
-  "field": "app_name.english"
-}
-```
-
-
-###### Charger les données
-
-
-
-###### Rechercher de nouveau le token diabete. La recherche devrait être fructueuse si vous avez choisi le mapping adequat
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "match": {
-      "app_name.english": "diabete"
-    }
-  }
-}
-```
-
-
-###### Ré-écrivez la requête en recherchant simultanément sur les champs que vous estimez pertinents tout en boostant les recherches des saisies exactes des utilisateurs.
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "diabetes",
-      "fields": ["app_name^4","app_name.english","genres.english"]
-    }
-  }
-}
-```
-
-
-
-###### Rechercher les documents qui contiennent draw ou art dans le champ app_name
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": {
-      "match": {
-        "app_name": "draw art"
-      }
-  }
-}
-```
-
-###### Rechercher les documents qui contiennent draw et art dans le champ app_name
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-      "match": 
-      {
-        "app_name": 
-        {
-          "query": "draw art",
-          "operator": "and"
-        }
-      }
-  }
-}
-```
-
-
-###### Rechercher les documents qui contiennent 
-* diabète  dans le champ description 
-* pour les applications gratuites 
-* qui ont un rating supérieur à 4.5
-* qui ont été mises à jour (last_updated) en 2019 
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "bool": 
-    {
-      "must": 
-      [
-        {"multi_match": {
-          "query": "diabete",
-          "fields": ["app_name^4","app_name.english"]
-        }}
-      ],
-      "filter": 
-      [
-        {
-          "term": {
-            "type.keyword": "Free"
-          }          
+  "tp_elastic_gstore_cp" : {
+    "aliases" : { },
+    "mappings" : {
+      "properties" : {
+        "@timestamp" : {
+          "type" : "date"
         },
-        {
-          "range" : {
-            "rating" : {
-              "gte" : 4.5
+        "android_ver" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
             }
           }
         },
-        {
-          "range" : {
-            "last_updated" : {
-              "gte" : "2018-01-01"
+        "app_name" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "category" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "content_rating" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "current_ver" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "genres" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "installs" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "last_updated" : {
+          "type" : "date"
+        },
+        "price" : {
+          "type" : "float"
+        },
+        "rating" : {
+          "type" : "float"
+        },
+        "reviews" : {
+          "type" : "long"
+        },
+        "size" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "type" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
             }
           }
         }
-      ]
-    }
-  }
-}
-```
-
-###### Rechercher les documents qui contiennent messaging+ dans le champ app_name
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "messaging+",
-      "fields": ["app_name"]
-    }
-  }
-}
-```
-
-
-* On cherche messaging+ mais c’est messaging qui remonte en premier
-
-###### Modification du mapping
-
-```shell
-DELETE tp_elastic_gstore_*
-```
-
-
-```json
-PUT tp_elastic_gstore_v3
-{
-  "settings": 
-  {
-    "analysis": 
-    {
-      "analyzer": 
-      {
-        "ws_analyzer": 
-        {
-          "type": "custom",
-          "tokenizer": "whitespace",
-          "filter": 
-          [
-            "lowercase"
-          ]
-        }        
       }
     }
-  }, 
+  }
+}
+```
+
+
+```
+GET tp_elastic_gstore_cp/_count
+```
+
+```
+GET tp_elastic_gstore_cp/_flush
+```
+
+
+```
+POST /tp_elastic_gstore_cp1/_forcemerge?max_num_segments=1
+```
+
+```
+GET tp_elastic_gstore_cp/_flush
+```
+
+#### Faites une statistique rapide de la taille de l'unique shard pour cet index (api _cat)
+
+##### Query
+```
+GET /_cat/shards/tp_elastic_gstore_cp?v
+```
+
+##### Réponse
+```
+index                 shard prirep state     docs  store ip        node
+tp_elastic_gstore_cp 0     p      STARTED 100000 18.2mb 127.0.0.1 iPro-de-zouheir
+```
+
+#### Faites une statistique détaillée des caractéristiques de ce index (api _stats)
+
+
+```
+GET /tp_elastic_gstore_cp/_stats
+```
+
+* Contrôler bien qu'il ne reste plus qu'un seul segment
+* Récupérer la taille des documents (champ "size_in_bytes")
+ 
+ 
+#### Résultats 
+L'idée n'est pas d'avoir exactement les mêmes chiffres mais plutot de comparer la variation de la taille en fonction de différents types d'indexation.
+
+* ES Version 7.3.1
+    *  100.000        =>  17522189 bytes
+    *  100.000.000    =>  (17522189*1000) / (1024*1024*1024) = 16,3  gb
+    *  pendant  30 jours 480 gb
+ 
+
+* ES Version 7.6.2
+    *  100.000        =>  17049761 bytes
+    *  100.000.000    =>  (17049761*1000) / (1024*1024*1024) = 15,9  gb
+    *  pendant  30 jours 476 gb 
+ 
+ 
+### Index personnalisé 2
+
+Pour les index dont le mapping n'est pas inféré (au moins en partie), la procédure est la suivante
+
+#### Supprimer les index précédents
+```
+DELETE tp_elastic_gstore_c*
+```
+
+#### Créer l'index avec le mapping fourni
+```json
+PUT tp_elastic_gstore_cpx
+{
   "mappings": 
   {
         "properties" : 
         {
-          "app_name" : 
-          {
-            "type" : "text",
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              },
-              "whitespace" :
-              {
-                "type" : "text",
-                "analyzer" : "ws_analyzer"
-              }              
-            }
-          },
-          "genres" : 
-          {
-            "type" : "text",
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              }              
-            }
-          }     
+          ...                              
         }
   }
 }
 ```
 
-Créer alias
-```json
+#### Créer l'alias 
+* Remplacer le x par la version de l'index testé
+```
 POST /_aliases
 {
     "actions" : [
-        { "add" : { "index" : "tp_elastic_gstore_v3", "alias" : "tp_elastic_gstore" } }
+        { "add" : { "index" : "tp_elastic_gstore_cpx", "alias" : "tp_elastic_gstore_cp" } }
     ]
 }
 ```
 
 
-###### Tester le nouveau mapping avant le chargement des données
-```json
-GET /tp_elastic_gstore/_analyze
-{
-  "text": ["messaging+","messaging"],
-  "field": "app_name.whitespace"
-}
+#### Charger les données
+```shell script
+./bin/logstash   -f ./<$PATH_TO>/ls-google-playstore.conf
 ```
 
-###### Charger les données
-
-*  Une recherche du token messaging+ ne trouve que les documents contenant cette chaîne
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "messaging+",
-      "fields": ["app_name.whitespace"]
-    }
-  }
-}
-```
-
-* Lors d’une recherche du token messaging+, les documents le contenant remontent en premier
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "messaging+",
-      "fields": ["app_name","app_name.english","app_name.whitespace"]
-    }
-  }
-}
-```
+Pour l'index personnalisé 2, les resultats sont indiqués ci-dessous
+* 7.3.1
+    *  100.000        =>  17858883  bytes
+    *  100.000.000    =>  (17858883*1000) / (1024*1024*1024) = 16,63  gb
+    *  pendant  30 jours 499 gb
 
 
-###### Rechercher les documents qui contiennent le token food dans le champ "category" 
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "food",
-      "fields": ["category"],
-      "type": "best_fields"
-    }
-  }
-}
-```
+* *7.6.2
+    *  100.000        =>  17335363  bytes
+    *  100.000.000    =>  (17335363*1000) / (1024*1024*1024) = 16,1  gb
+    *  pendant  30 jours 480 gb
 
 
-###### La recherche devrait être infructueuse. Comment elargir le spectre de la recherche sans modification du mapping.
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "food",
-      "fields": ["category","app_name","genres"]
-    }
-  }
-}
-```
 
-###### Modification du mapping
-```shell
-DELETE tp_elastic_gstore_*
-```
+### Index personnalisé 3
 
-```json
-PUT tp_elastic_gstore_v4
-{
-  "settings": 
-  {
-    "analysis": 
-    {
-      "analyzer": 
-      {
-        "ws_analyzer": 
-        {
-          "type": "custom",
-          "tokenizer": "whitespace",
-          "filter": 
-          [
-            "lowercase"
-          ]
-        }        
-      }
-    }
-  }, 
-  "mappings": 
-  {
-        "properties" : 
-        {
-          "app_name" : 
-          {
-            "type" : "text",
-            "copy_to" : "catch_all",
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              },
-              "whitespace" :
-              {
-                "type" : "text",
-                "analyzer" : "ws_analyzer"
-              }              
-            }
-          },
-          "genres" : 
-          {
-            "type" : "text",
-            "copy_to" : "catch_all",            
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              }              
-            }
-          },
-          "category" : 
-          {
-            "type" : "text",
-            "copy_to" : "catch_all",            
-            "fields" :
-            {
-              "keyword" :
-              {
-                "type" : "keyword"
-              }              
-            }
-          },          
-          "catch_all" : 
-          {
-            "type" : "text"
-          }          
-        }
-  }
-}
-```
-
-Créer alias
-```json
-POST /_aliases
-{
-    "actions" : [
-        { "add" : { "index" : "tp_elastic_gstore_v4", "alias" : "tp_elastic_gstore" } }
-    ]
-}
-```
-
-Charger les données
-
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "match": {
-      "catch_all": "food"
-    }
-  }
-}  
-```
+* 7.3.1
+    *  100.000        =>  27879840  bytes
+    *  100.000.000    =>  (27879840*1000) / (1024*1024*1024) = 25,96  gb
+    *  pendant  30 jours 779 gb
+    
+* 7.6.2
+    *  100.000        =>  27277207  bytes
+    *  100.000.000    =>  (27277207*1000) / (1024*1024*1024) = 25,4  gb
+    *  pendant  30 jours 750 gb    
 
 
-###### dyabete
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "multi_match": {
-      "query": "dyabetes",
-      "fields": ["category","app_name","app_name.english","genres","genres.english"],
-      "fuzziness": "AUTO"
-    }
-  }
-}
-```
+### Index personnalisé 4
 
-###### searchAsYouType
+* 7.3.1
+    *  100.000        =>  15108285  bytes
+    *  100.000.000    =>  (15108285*1000) / (1024*1024*1024) = 14,07  gb
+    *  pendant  30 jours 422 gb
 
-* Supprimer les index existants
-```shell
-DELETE tp_elastic_gstore_*
-```
-
-* Créer l'index de travail tp_elastic_gstore_v5
-```json
-PUT tp_elastic_gstore_v5
-{
-  "settings": 
-  {
-    "analysis": 
-    {
-      "filter" : 
-      {
-        "ac_filter" :
-        {
-          "type": "edge_ngram",
-          "min_gram": 1,
-          "max_gram": 10
-        }
-      },      
-      "analyzer": 
-      {
-        "ws_analyzer": 
-        {
-          "type": "custom",
-          "tokenizer": "whitespace",
-          "filter": 
-          [
-            "lowercase"
-          ]
-        },
-        "ac_analyzer" : 
-        {
-          "tokenizer" : "standard",
-          "filter" : 
-          ["lowercase", "ac_filter"]
-        }
-      }
-    }
-  }, 
-  "mappings": 
-  {
-        "properties" : 
-        {
-          "app_name" : 
-          {
-            "type" : "text",
-            "copy_to" : "catch_all",
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              },
-              "whitespace" :
-              {
-                "type" : "text",
-                "analyzer" : "ws_analyzer"
-              },
-              "autocomplete" :
-              {
-                "type" : "text",
-                "analyzer": "ac_analyzer",
-                "search_analyzer" : "standard"
-              }
-            }
-          },
-          "genres" : 
-          {
-            "type" : "text",
-            "copy_to" : "catch_all",            
-            "fields" :
-            {
-              "english" :
-              {
-                "type" : "text",
-                "analyzer" : "english"
-              },
-              "autocomplete" :
-              {
-                "type" : "text",
-                "analyzer": "ac_analyzer",
-                "search_analyzer" : "standard"
-              }              
-            }
-          },
-          "category" : 
-          {
-            "type" : "text",
-            "copy_to" : "catch_all",            
-            "fields" :
-            {
-              "keyword" :
-              {
-                "type" : "keyword"
-              },
-              "autocomplete" :
-              {
-                "type" : "text",
-                "analyzer": "ac_analyzer",
-                "search_analyzer" : "standard"
-              }              
-            }
-          },          
-          "catch_all" : 
-          {
-            "type" : "text"
-          }          
-        }
-  }
-}
-```
+* 7.6.2
+    *  100.000        =>  14682805  bytes
+    *  100.000.000    =>  (14682805*1000) / (1024*1024*1024) = 13,6  gb
+    *  pendant  30 jours 410 gb
 
 
-* Créer alias
-    * L'alias tp_elastic_gstore va pointer sur l'index tp_elastic_gstore_v5 
-```json
-POST /_aliases
-{
-    "actions" : [
-        { "add" : { "index" : "tp_elastic_gstore_v5", "alias" : "tp_elastic_gstore" } }
-    ]
-}
-```
+### Bilan
+Bilan des résultats
 
-* Tester l'index avant chargement des données
-```json
-GET /tp_elastic_gstore/_analyze
-{
-  "text" : ["dating","diabete"],
-  "field": "app_name.autocomplete"
-}
-```
+|        Type de mapping              | Numéro index  | Espace disque (GB)  |
+| ----------------------------- |:-------------:|:-------------:|
+| Mapping personnalisé simple   | Exercice 4    |    410        |
+| Mapping inféré                | Exercice 1    |    476        |
+| Mapping mixte simple          | Exercice 2    |    480        |
+| Mapping mixte complexe        | Exercice 3    |    750        |
 
-
-* Charger les données
-    * Linux
-```shell
-$LOGSTATSH_INSTALL_DIR/bin/logstash -f <$PATH_TO>/ls-google-playstore.conf
-```
-*   
-    * Windows
-```shell
-%LOGSTATSH_INSTALL_DIR%\bin\ logstash -f C:\elastic\tp-elastic\data\ls-google-playstore.conf 
-```
-
-* Exécuter une requête de test
-```json
-GET /tp_elastic_gstore/_search
-{
-  "query": 
-  {
-    "match": {
-      "app_name.autocomplete": "D"
-    }
-  }
-}
-```
+### Conclusion
+Pour ce test
+* Penser à bien passer l'option max_num_segments=1 dans le forcemerge. 
+* L'exercice proposé est un cas d'école. Pour un test de sizing, essayer d'injecter une quantité importante et non redondante de données (le plus possible tout en restant sur des temps de chargement raisonnables). 
+* Noter que l'espace disque pris par l'index dépend du mapping. Plus le mapping est complexe, plus la taille de l'index sera importante
+* Ne pas se fier aux ratios. Faire des tests avec des données et un mapping analogues à la production. 
+* L'infrastructure doit également être proche de la production (OS, versions d'Elasticsearch, ...) 
