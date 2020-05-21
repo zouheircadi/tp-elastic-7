@@ -50,7 +50,7 @@ PUT /recovery_index
 GET /recovery_index/_count
 ```
 
-# Create first snapshot
+##### Create first snapshot
 ```
 POST /_snapshot/cluster-7.x-backup/snapshot_1
 {
