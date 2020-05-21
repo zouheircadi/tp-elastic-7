@@ -281,7 +281,7 @@ Pour l'index personnalisé 2, les resultats sont indiqués ci-dessous
 
 
 ### Bilan
-Bilan des résultats
+Bilan des résultats (version ES 7.6.2)
 
 |        Type de mapping              | Numéro index  | Espace disque (GB)  |
 | ----------------------------- |:-------------:|:-------------:|
