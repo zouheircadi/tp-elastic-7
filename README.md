@@ -287,8 +287,10 @@ Bilan des résultats (version ES 7.6.2)
 | ----------------------------- |:-------------:|:-------------:|
 | Mapping personnalisé simple   | Exercice 4    |    410        |
 | Mapping inféré                | Exercice 1    |    476        |
-| Mapping mixte simple          | Exercice 2    |    480        |
-| Mapping mixte complexe        | Exercice 3    |    750        |
+| Mapping mixte(*) simple          | Exercice 2    |    480        |
+| Mapping mixte(*) complexe        | Exercice 3    |    750        |
+
+(*) : Mapping mixte = Mapping personnalisé pour certains champs et inféré pour les autres.
 
 ### Conclusion
 Pour ce test
