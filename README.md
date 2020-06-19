@@ -65,7 +65,8 @@ POST /_snapshot/cluster-7.x-backup/snapshot_1
 ./bin/logstash   -f <$PATH_TO>/ls-google-playstore.cluster.conf
 ```
 
-##### Create second snapshot
+##### Create second snapshot 
+L'opération est bloquante en rajoutant "?wait_for_completion=true" dans l'URI
 ```
 POST /_snapshot/cluster-7.x-backup/snapshot_2?wait_for_completion=true
 {
@@ -122,7 +123,10 @@ GET /_cat/shards/recovery_index?v
 ```
 
 
+<!---
 ## Recovery after corruption
-
 ## Red state after nodes loss
+-->
+
+
 
