@@ -292,10 +292,15 @@ Bilan des résultats (version ES 7.6.2)
 
 (*) : Mapping mixte = Mapping personnalisé pour certains champs et inféré pour les autres.
 
+    
+
 ### Conclusion
-Pour ce test
-* Penser à bien passer l'option max_num_segments=1 dans le forcemerge. 
-* L'exercice proposé est un cas d'école. Pour un test de sizing, essayer d'injecter une quantité importante et non redondante de données (le plus possible tout en restant sur des temps de chargement raisonnables). 
-* Noter que l'espace disque pris par l'index dépend du mapping. Plus le mapping est complexe, plus la taille de l'index sera importante
-* Ne pas se fier aux ratios. Faire des tests avec des données et un mapping analogues à la production. 
-* L'infrastructure doit également être proche de la production (OS, versions d'Elasticsearch, ...) 
+On constate donc que plus le mapping est sophistiqué, plus l'index occupera de l'espace sur disque. La structure d'un index dépend évidemment des besoins métiers et techniques (la désactivation de certains éléments de mapping peut permettre de gagner de l'espace mais supprime certaines fonctionnalités). Nous avons toutefois démontré via cet exercice que la complexité éventuelle du schéma aura un impact pouvant aller du simple au double sur le volume de l'index. Il faudra donc bien veiller à éviter les fioritures superflux si la taille est un enjeu tout en respectant les besoins métiers.
+
+Par ailleurs, ce test est une des premières étapes du Capacity Planning. 
+
+Voici quelques autres remarques ou points d'attention  
+* Ne vous fiez pas aux ratios. Faites des tests avec des données et un mapping analogues à la production.
+* Pensez à bien passer l'option max_num_segments=1 dans le forcemerge et à contrôler via l'api _stats que l'index n'est constitué que d'un seul segment. Vous comparerez ainsi des index ayant exactement la même structure interne. 
+* L'exercice proposé est un cas d'école. Pour un test de sizing, essayez d'injecter une quantité importante et non redondante de données (le plus possible tout en restant sur des temps de chargement raisonnables) afin de minimiser l'effet de la compression des données.   
+* L'infrastructure doit être proche de la production (OS, versions d'Elasticsearch, ...) 
