@@ -2,8 +2,12 @@
 
 ## Index Lifecycle Management (ILM)
 
+Exercice de type tutorial. La correction est donnée au fil de l'eau dans l'exercice lui-même
 
-######  Créer un index avec les caractéristiques suivants
+## Allocation awareness
+### Sans allocation awareness
+
+######  Création index
 
 ```json
 PUT /awareness_index
