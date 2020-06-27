@@ -45,7 +45,7 @@ PUT /recovery_index
 
 ##### Première indexation des données
 ```shell script
-./bin/logstash   -f <$PATH_TO>/ls-google-playstore.cluster.conf
+./bin/logstash   -f <$PATH_TO>/ls-google-playstore.conf
 ```
 
 ##### Vérifier le nombre de documents de l'index créé. Il doit y avoir 100 000 documents
