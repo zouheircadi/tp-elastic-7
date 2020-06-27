@@ -3,7 +3,7 @@
 
 ## Simple recovery
 
-##### Start cluster
+##### Démarrer cluster
 
 ##### Requête REST pour la création du repository
 ```json
