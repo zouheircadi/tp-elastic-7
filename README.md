@@ -130,6 +130,3 @@ GET /_cat/shards/recovery_index?v
 ## Recovery after corruption
 ## Red state after nodes loss
 -->
-
-
-
