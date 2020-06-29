@@ -5,8 +5,12 @@
 
 ### Index avec un mapping par défaut
 
+##### Delete all index
+```
+DELETE tp_elastic_gstore_c*
+```
 
-#### Create template
+##### Create template
 ```json
 PUT /_template/template_capacity_planning
 {
@@ -19,21 +23,22 @@ PUT /_template/template_capacity_planning
 }
 ```
 
-#### Delete all index
-```
-DELETE tp_elastic_gstore_c*
-```
-
-#### Load Data
+##### Load Data
 ```shell script
 ./bin/logstash   -f ./<$PATH_TO>/ls-google-playstore.conf
 ```
 
-#### Mapping control
+##### Index check 
+```
+HEAD tp_elastic_gstore_cp
+```
+
+##### Mapping control
 ```
 GET tp_elastic_gstore_cp
 ```
 * Le mapping est inféré. Il est représenté ci-dessous (partie mappings). Tous les champs de type text ont un double mapping text et keyword limité à 256 caractères
+* Notez également que le contrôle de l'existence de l'index est implicite avec cette requête. Si l'index n'existait pas, nous aurions obtenu une erreur index_not_found_exception (code HTTP 404). Nous aurions donc pû faire d'une pierre deux coups.
 
 ```json
 {
@@ -143,20 +148,22 @@ GET tp_elastic_gstore_cp
 }
 ```
 
-
+##### Count
 ```
 GET tp_elastic_gstore_cp/_count
 ```
 
+##### flush
 ```
 GET tp_elastic_gstore_cp/_flush
 ```
 
-
+###### force merge pour ne plus avoir qu'un seul segment
 ```
 POST /tp_elastic_gstore_cp1/_forcemerge?max_num_segments=1
 ```
 
+##### Nouveau flush
 ```
 GET tp_elastic_gstore_cp/_flush
 ```
@@ -204,12 +211,12 @@ L'idée n'est pas d'avoir exactement les mêmes chiffres mais plutot de comparer
 
 Pour les index dont le mapping n'est pas inféré (au moins en partie), la procédure est la suivante
 
-#### Supprimer les index précédents
+##### Supprimer les index précédents
 ```
 DELETE tp_elastic_gstore_c*
 ```
 
-#### Créer l'index avec le mapping fourni
+##### Créer l'index avec le mapping fourni
 ```json
 PUT tp_elastic_gstore_cpx
 {
@@ -223,7 +230,7 @@ PUT tp_elastic_gstore_cpx
 }
 ```
 
-#### Créer l'alias 
+##### Créer l'alias 
 * Remplacer le x par la version de l'index testé
 ```
 POST /_aliases
@@ -235,12 +242,12 @@ POST /_aliases
 ```
 
 
-#### Charger les données
+##### Charger les données
 ```shell script
 ./bin/logstash   -f ./<$PATH_TO>/ls-google-playstore.conf
 ```
 
-Pour l'index personnalisé 2, les resultats sont indiqués ci-dessous
+Pour l'index personnalisé 2, les résultats sont indiqués ci-dessous
 * 7.3.1
     *  100.000        =>  17858883  bytes
     *  100.000.000    =>  (17858883*1000) / (1024*1024*1024) = 16,63  gb
@@ -249,7 +256,7 @@ Pour l'index personnalisé 2, les resultats sont indiqués ci-dessous
 
 * *7.6.2
     *  100.000        =>  17335363  bytes
-    *  100.000.000    =>  (17335363*1000) / (1024*1024*1024) = 16,1  gb
+    *  100.000.000    =>  (17335363*1000) / (1024*1024*1024) = 16,10  gb
     *  pendant  30 jours 480 gb
 
 
@@ -293,7 +300,6 @@ Bilan des résultats (version ES 7.6.2)
 (*) : Mapping mixte = Mapping personnalisé pour certains champs et inféré pour les autres.
 
     
-
 ### Conclusion
 On constate donc que plus le mapping est sophistiqué, plus l'index occupera de l'espace sur disque. La structure d'un index dépend évidemment des besoins métiers et techniques (la désactivation de certains éléments de mapping peut permettre de gagner de l'espace mais supprime certaines fonctionnalités). Nous avons toutefois démontré via cet exercice que la complexité éventuelle du schéma aura un impact pouvant aller du simple au double sur le volume de l'index. Il faudra donc bien veiller à éviter les fioritures superflux si la taille est un enjeu tout en respectant les besoins métiers.
 
@@ -303,4 +309,4 @@ Voici quelques autres remarques ou points d'attention
 * Ne vous fiez pas aux ratios. Faites des tests avec des données et un mapping analogues à la production.
 * Pensez à bien passer l'option max_num_segments=1 dans le forcemerge et à contrôler via l'api _stats que l'index n'est constitué que d'un seul segment. Vous comparerez ainsi des index ayant exactement la même structure interne. 
 * L'exercice proposé est un cas d'école. Pour un test de sizing, essayez d'injecter une quantité importante et non redondante de données (le plus possible tout en restant sur des temps de chargement raisonnables) afin de minimiser l'effet de la compression des données.   
-* L'infrastructure doit être proche de la production (OS, versions d'Elasticsearch, ...) 
+* L'infrastructure doit être identique à la production (OS, versions d'Elasticsearch, ...) 
