@@ -89,17 +89,17 @@
 
 # action.auto_create_index: .watches,.triggered_watches,.watcher-history-* 
 
-discovery.seed_hosts: ["192.168.1.10:10300", "192.168.1.10:20300", "192.168.1.10:30300"]
-network.host: 192.168.1.10
+node.name: node-1
+cluster.name: production-mode
 
-node.name: node-4
-cluster.name: tp-elastic-cluster
+network.host: [192.168.1.10,_local_]
 
-http.port: 40200
-transport.port: 40300
-
-node.master: false 
+http.port: 10200
+transport.port: 10300
 
 cluster.remote.connect: false
 
-node.attr.box_type: cold
+discovery.seed_hosts: ["192.168.1.10:10300", "192.168.1.10:20300", "192.168.1.10:30300"]
+cluster.initial_master_nodes: node-1,node-2,node-3
+
+node.attr.box_type: hot
