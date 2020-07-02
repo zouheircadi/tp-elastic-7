@@ -4,6 +4,7 @@
 
 ### TEST
 // tag::create_tp_elastic_11[]
+
 POST tp_elastic_11/_bulk
 { "index": { "_id": 1 }}
 {"app_name" : "Photo Editor", "category" : "ART-AND-DESIGN", "last_updated" : "2018-01-06","rating" : 4.1}
@@ -17,6 +18,7 @@ POST tp_elastic_11/_bulk
 { "app_name" : "QR Code Reader", "category" : "TOOLS", "last_updated" : "2016-03-15", "rating" : 4.0}
 { "index": { "_id": 6 }}      
 { "app_name" : "Diabetes:M", "category" : "MEDICAL", "last_updated" : "2018-07-31", "rating" : 4.6}
+
 // end::create_tp_elastic_11[]
 
 ### END TEST
