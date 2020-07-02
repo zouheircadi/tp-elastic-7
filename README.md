@@ -2,6 +2,7 @@
 ### Autocréation d’index
 
 Créer un index par injection de données
+// tag::create_tp_elastic_11[]
 ```shell
 POST tp_elastic_11/_bulk
 { "index": { "_id": 1 }}
@@ -17,7 +18,7 @@ POST tp_elastic_11/_bulk
 { "index": { "_id": 6 }}      
 { "app_name" : "Diabetes:M", "category" : "MEDICAL", "last_updated" : "2018-07-31", "rating" : 4.6}
 ```
-
+// end::create_tp_elastic_11[]
 
 Afficher les caractéristiques de l’index nouvellement créé
 ```shell
