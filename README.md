@@ -191,7 +191,7 @@ GET /tp_elastic_gstore/_search
 
 
 ###### Rechercher les documents qui contiennent 
-* diabète  dans le champ description 
+* diabète  dans le champ app_name (ainsi que dans les éventuels champs imbriqués) 
 * pour les applications gratuites 
 * qui ont un rating supérieur à 4.5
 * qui ont été mises à jour (last_updated) en 2019 
